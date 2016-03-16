@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">蜂贝贝商城</string>
+	<string name="home">首页</string>
+	<string name="cart">购物车</string>
+	<string name="category">分类</string>
+	<string name="ucenter">会员中心</string>
+	<string name="scan">扫一扫</string>
+	<string name="message">信息</string>
+	<string name="search_goods">搜索商品</string>
+	<string name="goods_category">商品分类</string>
+	<string name="my_ucenter">我的蜂贝贝</string>
+	<string name="my_order">我的订单</string>
+	<string name="my_collect">我的收藏</string>
+</resources>
