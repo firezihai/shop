@@ -15,7 +15,7 @@ public final class Constants {
 	/**
 	 * 服务器端口
 	 */
-	public final static String PORT = "80";
+	public final static String PORT = ":80";
 	
 	/**
 	 * 服务器端应用名称
@@ -25,7 +25,7 @@ public final class Constants {
 	/**
 	 * 服务器端请求入口
 	 */
-	public final static String APP_URL = PROTOCOL + HOST + PORT + APP + "/index.php?";
+	public final static String APP_URL = PROTOCOL + HOST  + APP + "/index.php?";
 	
 	/**
 	 * 首页请求内容请求接口
