@@ -8,8 +8,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.GoodsDetailActivity;
+import com.fengbeibei.shop.activity.SubjectWebActivity;
 import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
+import com.fengbeibei.shop.adapter.Home3GridViewAdapter;
+import com.fengbeibei.shop.adapter.HomeGoodsGridViewAdapter;
 import com.fengbeibei.shop.bean.AdList;
+import com.fengbeibei.shop.bean.Home2Data;
+import com.fengbeibei.shop.bean.Home3Data;
+import com.fengbeibei.shop.bean.HomeGoods;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
@@ -19,41 +26,61 @@ import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
+import com.fengbeibei.shop.widget.MyGridView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 public class HomeFragment extends Fragment{
 	private PullToRefreshScrollView mPullToRefresh;
+	/*主布局*/
+	private View homeLayout;
 	private ScrollView mScrollView;
+	
+	/**
+	 * 记录按下时的位置
+	 */
+	private float downLocation;
 	private Button mScanBtn;
 	private Button mMessageBtn;
-	
+	/*轮播广告*/
 	private ViewPager mAdViewPager;
 	private ArrayList<ImageView> mAdData = new ArrayList<ImageView>();
 	private LinearLayout mAdPoint;
 	private ArrayList<ImageView> mAdPointData = new ArrayList<ImageView>();
+	private  final int SHOW_NEXT = 0011;
+	private boolean mShowNext = true;
+	private int mCurrentIndex = 0;
+	/*菜单*/
 	private Button mMenuCategoryBtn;
 	private Button mMenuUcenterBtn;
 	private Button mMenuOrderBtn;
 	private Button mMenuCollectBtn;
 	private LinearLayout mHomeData;
 	
+	/*ImageLoader*/
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options = SystemHelper.getDisplayImageOptions(); 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
@@ -72,17 +99,52 @@ public class HomeFragment extends Fragment{
 			}
 			
 		});
+		imageLoader.init(ImageLoaderConfiguration.createDefault(HomeFragment.this.getActivity()));
 		mScrollView =mPullToRefresh.getRefreshableView();
 		initView(homeLayout);
 		initData();
 		return homeLayout;
 	}
+	
+	public void OnViewClick(View view,final String type ,final String data){
+		view.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					 downLocation = event.getX();
+				}else if (event.getAction() == MotionEvent.ACTION_MOVE){
+					
+				} else if (event.getAction() == MotionEvent.ACTION_UP){
+					if (downLocation == event.getX()) {
+						if(type.equals("keyword")){
+							
+						} else if (type.equals("url")){
+							Intent intent  = new Intent(getActivity(),SubjectWebActivity.class);
+							startActivity(intent);
+						} else if (type.equals("goods")){
+							Intent intent  = new Intent(getActivity(),GoodsDetailActivity.class);
+							startActivity(intent);
+						}
+					}
+				}
+				return true;
+			}
+			
+		});;
+	}
+	/**
+	 * 初始化所有控件
+	 * @param homeLayout
+	 */
 	public void initView(View homeLayout){
 		mAdViewPager = (ViewPager)homeLayout.findViewById(R.id.adViewPager);
 		mAdPoint = (LinearLayout) homeLayout.findViewById(R.id.adPoint);
-		
+		mHomeData = (LinearLayout)homeLayout.findViewById(R.id.homeData);
 	}
 	public void initData(){
+		
 		HttpClientHelper.asynGet(Constants.APP_URL, new CallBack(){
 
 			@Override
@@ -90,20 +152,26 @@ public class HomeFragment extends Fragment{
 				// TODO Auto-generated method stub
 				mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
 				if(response.what == HttpStatus.SC_OK){
+					
 					mHomeData.removeAllViews();
 					try{
 						String json = (String)response.obj;
-						Log.d("json",json);
 						JSONArray arr = new JSONArray(json);
 						int size = null == arr ? 0 : arr.length();
 						for(int i =0 ; i<size ; i++){
 							JSONObject  obj = arr.getJSONObject(i);
 							JSONObject jsonObj = new JSONObject(obj.toString());
-							if(!jsonObj.has("home1")){
+							if(!jsonObj.isNull("home1")){
+							
+							}else if (!jsonObj.isNull("home2")){
+								String home2Json = jsonObj.getString("home2");
+								initHome2(home2Json);
+							}else if(!jsonObj.isNull("home3")){
+								String home3Json = jsonObj.getString("home3");
+								initHome3(home3Json);
+							}else if( !jsonObj.isNull("adv_list")){
 								
-							}else if(!jsonObj.has("adv")){
 								String advertJson = jsonObj.getString("adv_list");
-								
 								JSONObject itemObj = new JSONObject(advertJson);
 								String item = itemObj.getString("item");
 								if(!item.equals("[]")){
@@ -129,11 +197,82 @@ public class HomeFragment extends Fragment{
 			
 		});
 	}
+	public void initHome2(String json){
+		Home2Data home2Data = Home2Data.newInstance(json);
+		View home2View = getActivity().getLayoutInflater().inflate(R.layout.home_item2, null);
+		TextView home2Title = (TextView)home2View.findViewById(R.id.home2Title);
+		
+		ImageView imageView1 = (ImageView) home2View.findViewById(R.id.home2Image1);
+		ImageView imageView2 = (ImageView) home2View.findViewById(R.id.home2Image2);
+		ImageView imageView3 = (ImageView) home2View.findViewById(R.id.home2Image3);
+		imageLoader.displayImage(home2Data.getSquareImage(), imageView1, options, animateFirstListener);
+		imageLoader.displayImage(home2Data.getRectangle1Image(), imageView2, options, animateFirstListener);
+		imageLoader.displayImage(home2Data.getRectangle2Image(), imageView3, options, animateFirstListener);
+		if(!home2Data.getTitle().equals("") && !home2Data.getTitle().equals("null") && home2Data.getTitle() != null){
+			home2Title.setVisibility(View.VISIBLE);
+			home2Title.setText(home2Data.getTitle());
+		}else{
+			home2Title.setVisibility(View.GONE);
+		}
+		mHomeData.addView(home2View);
+	}
 	
+	public void initHome3(String json){
+
+		Home3Data home3Data = Home3Data.newInstance(json);
+		ArrayList<Home3Data> home3DataItemList = Home3Data.newInstanceList(home3Data.getItem());
+		
+		View home3View = getActivity().getLayoutInflater().inflate(R.layout.home_item3, null);
+		TextView home3Title = (TextView) home3View.findViewById(R.id.home3Title);
+		
+		MyGridView home3GridView = (MyGridView) home3View.findViewById(R.id.home3GridView);
+		home3GridView.setFocusable(false);
+		Home3GridViewAdapter home3GridViewAdapter= new Home3GridViewAdapter(HomeFragment.this.getContext());
+		home3GridViewAdapter.setHome3Data(home3DataItemList);
+		home3GridView.setAdapter(home3GridViewAdapter);
+		if (!home3Data.getTitle().equals("") && !home3Data.getTitle().equals("null") && home3Data.getTitle() != null){
+			home3Title.setText(home3Data.getTitle());
+			home3Title.setVisibility(View.VISIBLE);
+		}else{
+			home3Title.setVisibility(View.GONE);
+		}
+		
+		mHomeData.addView(home3View);
+	}
+	
+	public void initHomeGoods(String json){
+		JSONObject itemObj = new JSONObject(json);
+		String item = itemObj.getString("item");
+		String title = itemObj.getString("title");
+		if ( !item.equals("[]")){
+			ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(json);
+			View homeGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods, null);
+			MyGridView homeGoodsGridView = (MyGridView)homeGoodsView.findViewById(R.id.homeGoodsGridView);
+			HomeGoodsGridViewAdapter homeGoodsGridViewAdapter = new HomeGoodsGridViewAdapter(HomeFragment.this.getContext());
+			homeGoodsGridViewAdapter.setHomeGoods(homeGoods);
+			homeGoodsGridView.setFocusable(\false);
+			homeGoodsGridView.setAdapter(homeGoodsGridViewAdapter);
+			homeGoodsGridViewAdapter.notifyDataSetChanged();
+			TextView homeGoodsTitle = homeGoodsView.findViewById(R.id.homeGoodsTitle);
+			if(!title.equals("") && !title.equals("null") && title != null){			
+				homeGoodsTitle.setText(title);
+				homeGoodsTitle.setVisibility(View.VISIBLE);
+			}else{
+				homeGoodsTitle.setVisibility(View.GONE);
+			}
+		}
+		
+	}
+	/**
+	 * 顶部广告
+	 * @param adList  广告信息数组
+	 */
 	public void initHeadAd(ArrayList<AdList> adList){
+		mHandler.removeMessages(SHOW_NEXT);
 		mAdViewPager.removeAllViews();
 		mAdPoint.removeAllViews();
 		mAdData.clear();
+		mAdPointData.clear();
 		for(int i =0 ; i<adList.size() ; i++){
 			AdList ad = adList.get(i);
 			ImageView imageView = new ImageView(HomeFragment.this.getActivity());
@@ -147,7 +286,7 @@ public class HomeFragment extends Fragment{
 			imageViewPoint.setLayoutParams(pointParams);
 			imageViewPoint.setImageResource(R.drawable.home_point);
 			
-			//mAdPointData.add(mAdPoint);
+			mAdPointData.add(imageViewPoint);
 			mAdPoint.addView(imageViewPoint);
 		}
 		AdViewPagerAdapter adViewPagerAdapter = new AdViewPagerAdapter(mAdData);
@@ -173,6 +312,73 @@ public class HomeFragment extends Fragment{
 			}
 			
 		});
+		
+		if(mAdData.size()> 0){
+			selectPoint(0);
+			mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
+		}
 	}
 	
+	Handler mHandler = new Handler(){
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			if(msg.what == SHOW_NEXT){
+				if(mShowNext){
+					showNext();
+				}else{
+					showPrev();
+				}
+				mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
+			}
+			//switch(msg.what)
+			super.handleMessage(msg);
+		}
+	};
+	/**
+	 * 下一张图片
+	 */
+	private void showNext(){
+		mCurrentIndex++;
+		if(mCurrentIndex > mAdData.size() -1){
+			unSelectPoint(mAdData.size() -1);
+			mCurrentIndex = 0;
+			selectPoint(mCurrentIndex);
+		}else{
+			unSelectPoint(mCurrentIndex-1);
+			selectPoint(mCurrentIndex);
+		}
+		mAdViewPager.setCurrentItem(mCurrentIndex);
+	}
+	/**
+	 * 上一张图片
+	 */
+	private void showPrev(){
+		mCurrentIndex--;
+		if(mCurrentIndex < -1){
+			unSelectPoint(mCurrentIndex+1);
+			mCurrentIndex = mAdData.size() -1;
+			selectPoint(mCurrentIndex);
+		}else{
+			unSelectPoint(mCurrentIndex+1);
+			selectPoint(mCurrentIndex);
+		}
+		mAdViewPager.setCurrentItem(mCurrentIndex);
+	}
+	/**
+	 * 激活已选中图片对应点
+	 */
+	private void selectPoint(int index){
+		ImageView img = mAdPointData.get(index);
+		img.setSelected(true);
+	}
+	/**
+	 * 禁用未选中图片对应点
+	 * @param index
+	 */
+	private void unSelectPoint(int index){
+		ImageView img = mAdPointData.get(index);
+		img.setSelected(false);
+	}
 }

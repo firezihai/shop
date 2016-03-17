@@ -42,7 +42,7 @@
             		android:drawableStart="@drawable/icon_search"
            			android:drawableLeft="@drawable/icon_search"
            			android:drawablePadding="5dp"
-                    android:background="@color/lightgrey"
+                    android:background="@color/darkgrey"
                     android:text="@string/search_goods"
                     android:textSize="12sp"
                     android:textColor="@color/grey"/>

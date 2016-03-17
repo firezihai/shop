@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -39,6 +40,7 @@ import org.json.JSONObject;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 @SuppressWarnings("deprecation")
 public class HttpClientHelper {
@@ -135,7 +137,7 @@ public class HttpClientHelper {
 				msg.getData().putBoolean(HASMORE, false);
 				try{
 					String json = get(url);
-					if(json != null && "".equals(json) && !"null".equalsIgnoreCase(json)){
+					if (json != null && !"".equals(json)	&& !"null".equalsIgnoreCase(json)) {
 						json = json.replaceAll("\\x0a|\\x0d", "");
 						JSONObject obj = new JSONObject(json);
 						if (null != obj && obj.has(CODE)) {
