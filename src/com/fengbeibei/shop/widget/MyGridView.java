@@ -43,8 +43,8 @@ public class MyGridView extends GridView{
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		// TODO Auto-generated method stub
-		//int expendSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE>>2, MeasureSpec.AT_MOST);
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		int expendSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE>>2, MeasureSpec.AT_MOST);
+		super.onMeasure(widthMeasureSpec, expendSpec);
 	}
 
 	

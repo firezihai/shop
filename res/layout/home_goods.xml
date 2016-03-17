@@ -4,33 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/lightgrey"
     android:orientation="vertical" >
-    <RelativeLayout 
+    <TextView 
+        android:id="@+id/homeGoodsTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <View 
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/darkgrey"/>
-        <LinearLayout 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/lightgrey">
-            <ImageView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_xin"
-                android:scaleType="fitXY"/>
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/guess_like_love"
-                android:textSize="12sp"
-                android:textColor="@color/darkgrey"/>
-        </LinearLayout>
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:textSize="13sp"
+        android:textColor="@color/darkgrey"/>
 	<com.fengbeibei.shop.widget.MyGridView
 	    android:id="@+id/homeGoodsGridView"
 	    android:layout_width="match_parent"

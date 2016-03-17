@@ -22,6 +22,8 @@ public final class Constants {
 	 */
 	public final static String APP = "/mobile";
 	
+	public final static String PAGESIZE = "20";
+	
 	/**
 	 * 服务器端请求入口
 	 */

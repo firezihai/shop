@@ -3,6 +3,7 @@ package com.fengbeibei.shop.adapter;
 import java.util.ArrayList;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.adapter.Home3GridViewAdapter.ViewHolder;
 import com.fengbeibei.shop.bean.HomeGoods;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
@@ -36,7 +37,7 @@ public class HomeGoodsGridViewAdapter extends BaseAdapter{
 	public HomeGoodsGridViewAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
-		mInflater  = LayoutInflater.from(context);
+		mInflater  = LayoutInflater.from(mContext);
 	}
 	public void setHomeGoods(ArrayList<HomeGoods> homeGoods){
 		mHomeGoods = homeGoods;
@@ -64,14 +65,14 @@ public class HomeGoodsGridViewAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if (convertView != null ){
-			convertView = mInflater.inflate(R.layout.home_goods_grid_item, null);
+			convertView = mInflater.inflate(R.layout.home_goods_grid_item, parent);
 			holder = new ViewHolder();
 			holder.goodsName = (TextView) convertView.findViewById(R.id.goodsName);
 			holder.goodsPrice = (TextView) convertView.findViewById(R.id.goodsPrice);
 			holder.goodsName = (TextView) convertView.findViewById(R.id.goodsImage);
 			convertView.setTag(holder);
 		} else {
-			holder = (ViewHolder)convertView.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
 		HomeGoods homeGoods = mHomeGoods.get(position);
 		holder.goodsName.setText(homeGoods.getGoodsName());

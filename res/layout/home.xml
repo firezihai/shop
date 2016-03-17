@@ -1,122 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context=".activity.HomeActivity" >
+
     <com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/homePullToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        ptr:ptrAnimationStyle="rotate"
+        ptr:ptrHeaderBackground="@color/green"
+        ptr:ptrHeaderSubTextColor="@color/orange_red"
+        ptr:ptrHeaderTextColor="@color/white"
+        ptr:ptrRotateDrawableWhilePulling="false" >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical" >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:orientation="horizontal"
-                android:background="@color/green">
-                <Button 
+                android:background="@color/green"
+                android:orientation="horizontal" >
+
+                <Button
                     android:id="@+id/scanBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:background="@null"
                     android:drawableTop="@drawable/icon_scan"
                     android:gravity="center_horizontal"
-                    android:background="@null"
                     android:text="@string/scan"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"/>
-                <TextView 
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
                     android:id="@+id/searchBtn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:paddingTop="3dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightgrey"
+                    android:drawableLeft="@drawable/icon_search"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/icon_search"
+                    android:gravity="center_vertical|start"
                     android:paddingBottom="3dp"
-                    android:gravity="center_vertical|left"
-            		android:drawableStart="@drawable/icon_search"
-           			android:drawableLeft="@drawable/icon_search"
-           			android:drawablePadding="5dp"
-                    android:background="@color/darkgrey"
+                    android:paddingTop="3dp"
                     android:text="@string/search_goods"
-                    android:textSize="12sp"
-                    android:textColor="@color/grey"/>
-                <Button 
+                    android:textColor="@color/darkgrey"
+                    android:textSize="12sp" />
+
+                <Button
                     android:id="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:gravity="center_horizontal"
-                    android:drawableTop="@drawable/icon_message"
-                    android:drawablePadding="5dp"
                     android:background="@null"
+                    android:drawablePadding="5dp"
+                    android:drawableTop="@drawable/icon_message"
+                    android:gravity="center_horizontal"
                     android:text="@string/message"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
-            <RelativeLayout 
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/home_slide_height">
+                android:layout_height="@dimen/home_slide_height" >
+
                 <android.support.v4.view.ViewPager
                     android:id="@+id/adViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
+
                 <LinearLayout
                     android:id="@+id/adPoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="10dp">
-                    
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal" >
                 </LinearLayout>
             </RelativeLayout>
-            <LinearLayout 
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:background="@color/white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" >
+
                 <Button
                     android:id="@+id/categoryMenu"
                     style="@style/HomeMenu"
                     android:drawableTop="@drawable/icon_menu_category"
-                    android:text="@string/goods_category"/>
+                    android:text="@string/goods_category" />
+
                 <Button
                     android:id="@+id/ucenterMenu"
                     style="@style/HomeMenu"
                     android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_ucenter"/>
+                    android:text="@string/my_ucenter" />
+
                 <Button
                     android:id="@+id/orderMenu"
                     style="@style/HomeMenu"
                     android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_order"/>
+                    android:text="@string/my_order" />
+
                 <Button
                     android:id="@+id/collectMenu"
                     style="@style/HomeMenu"
                     android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_collect"/>
+                    android:text="@string/my_collect" />
             </LinearLayout>
+
             <View
-	      	    android:layout_width="match_parent"
-	      		android:layout_height="1px"
-	      		android:background="#F0F0F0"/>
-            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#F0F0F0" />
+
+            <LinearLayout
                 android:id="@+id/homeData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
         </LinearLayout>
     </com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView>
 

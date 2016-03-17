@@ -13,18 +13,20 @@ import com.fengbeibei.shop.activity.SubjectWebActivity;
 import com.fengbeibei.shop.adapter.AdViewPagerAdapter;
 import com.fengbeibei.shop.adapter.Home3GridViewAdapter;
 import com.fengbeibei.shop.adapter.HomeGoodsGridViewAdapter;
+import com.fengbeibei.shop.adapter.HomeGoodsListGridViewAdapter;
 import com.fengbeibei.shop.bean.AdList;
 import com.fengbeibei.shop.bean.Home2Data;
 import com.fengbeibei.shop.bean.Home3Data;
 import com.fengbeibei.shop.bean.HomeGoods;
+import com.fengbeibei.shop.bean.HomeGoodsList;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
 import com.fengbeibei.shop.widget.MyGridView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -91,12 +93,23 @@ public class HomeFragment extends Fragment{
 		View homeLayout = inflater.inflate(R.layout.home,parent, false);
 		mPullToRefresh = (PullToRefreshScrollView)homeLayout.findViewById(R.id.homePullToRefresh);
 		mPullToRefresh.setMode(Mode.BOTH);
-		mPullToRefresh.setOnRefreshListener(new OnRefreshListener<ScrollView>(){
+		mPullToRefresh.setOnRefreshListener(new OnRefreshListener2<ScrollView>(){
+
 			@Override
-			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+			public void onPullDownToRefresh(
+					PullToRefreshBase<ScrollView> refreshView) {
 				// TODO Auto-generated method stub
 				initData();
 			}
+
+			@Override
+			public void onPullUpToRefresh(
+					PullToRefreshBase<ScrollView> refreshView) {
+				// TODO Auto-generated method stub
+				
+				initGoodsList();
+			}
+			
 			
 		});
 		imageLoader.init(ImageLoaderConfiguration.createDefault(HomeFragment.this.getActivity()));
@@ -144,8 +157,7 @@ public class HomeFragment extends Fragment{
 		mHomeData = (LinearLayout)homeLayout.findViewById(R.id.homeData);
 	}
 	public void initData(){
-		
-		HttpClientHelper.asynGet(Constants.APP_URL, new CallBack(){
+		HttpClientHelper.asynGet(Constants.HOME_URL, new CallBack(){
 
 			@Override
 			public void onFinish(Message response) {
@@ -170,20 +182,49 @@ public class HomeFragment extends Fragment{
 								String home3Json = jsonObj.getString("home3");
 								initHome3(home3Json);
 							}else if( !jsonObj.isNull("adv_list")){
-								
-								String advertJson = jsonObj.getString("adv_list");
-								JSONObject itemObj = new JSONObject(advertJson);
-								String item = itemObj.getString("item");
-								if(!item.equals("[]")){
-									ArrayList<AdList> adList =AdList.newInstance(item);
-									if(adList.size() > 0 && adList != null){
-										initHeadAd(adList);
-									}
-								}
+								initHeadAd(jsonObj.getString("adv_list"));
+				
+							} else if( !jsonObj.isNull("goods")){
+								initHomeGoods( jsonObj.getString("goods") );
 							}
 						}
-						
+						View homGoodsListHead = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list_head, null);
+						mHomeData.addView(homGoodsListHead);
 					} catch(JSONException e){
+						e.printStackTrace();
+					}
+				}
+			}
+
+			@Override
+			public void onError(Exception e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
+	public void initGoodsList(){
+		
+		HttpClientHelper.asynGet(Constants.HOME_GOODS_URL, new CallBack(){
+
+			@Override
+			public void onFinish(Message response) {
+				mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
+				// TODO Auto-generated method stub
+				if (response.what == HttpStatus.SC_OK){
+					String json = (String)response.obj;
+					try{
+						JSONObject obj = new JSONObject(json);
+						String goodsListJson = obj.getString("list");
+						ArrayList<HomeGoodsList> goodsList = HomeGoodsList.newInstance(goodsListJson);
+						View homGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list, null);
+						MyGridView goodsGridView = (MyGridView) homGoodsView.findViewById(R.id.homeGoodsListGridView);
+						HomeGoodsListGridViewAdapter goodsGridViewAdapter = new HomeGoodsListGridViewAdapter(HomeFragment.this.getContext());
+						goodsGridViewAdapter.setHomeGoodsData(goodsList);
+						goodsGridView.setAdapter(goodsGridViewAdapter);
+						mHomeData.addView(homGoodsView);
+					} catch (JSONException e){
 						e.printStackTrace();
 					}
 				}
@@ -241,25 +282,29 @@ public class HomeFragment extends Fragment{
 	}
 	
 	public void initHomeGoods(String json){
-		JSONObject itemObj = new JSONObject(json);
-		String item = itemObj.getString("item");
-		String title = itemObj.getString("title");
-		if ( !item.equals("[]")){
-			ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(json);
-			View homeGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods, null);
-			MyGridView homeGoodsGridView = (MyGridView)homeGoodsView.findViewById(R.id.homeGoodsGridView);
-			HomeGoodsGridViewAdapter homeGoodsGridViewAdapter = new HomeGoodsGridViewAdapter(HomeFragment.this.getContext());
-			homeGoodsGridViewAdapter.setHomeGoods(homeGoods);
-			homeGoodsGridView.setFocusable(\false);
-			homeGoodsGridView.setAdapter(homeGoodsGridViewAdapter);
-			homeGoodsGridViewAdapter.notifyDataSetChanged();
-			TextView homeGoodsTitle = homeGoodsView.findViewById(R.id.homeGoodsTitle);
-			if(!title.equals("") && !title.equals("null") && title != null){			
-				homeGoodsTitle.setText(title);
-				homeGoodsTitle.setVisibility(View.VISIBLE);
-			}else{
-				homeGoodsTitle.setVisibility(View.GONE);
+		try{
+			JSONObject itemObj = new JSONObject(json);
+			String item = itemObj.getString("item");
+			String title = itemObj.getString("title");
+			if ( !item.equals("[]")){
+				ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(json);
+				View homeGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods, null);
+				MyGridView homeGoodsGridView = (MyGridView)homeGoodsView.findViewById(R.id.homeGoodsGridView);
+				HomeGoodsGridViewAdapter homeGoodsGridViewAdapter = new HomeGoodsGridViewAdapter(HomeFragment.this.getContext());
+				homeGoodsGridViewAdapter.setHomeGoods(homeGoods);
+				homeGoodsGridView.setFocusable(false);
+				homeGoodsGridView.setAdapter(homeGoodsGridViewAdapter);
+				homeGoodsGridViewAdapter.notifyDataSetChanged();
+				TextView homeGoodsTitle = (TextView)homeGoodsView.findViewById(R.id.homeGoodsTitle);
+				if(!title.equals("") && !title.equals("null") && title != null){			
+					homeGoodsTitle.setText(title);
+					homeGoodsTitle.setVisibility(View.VISIBLE);
+				}else{
+					homeGoodsTitle.setVisibility(View.GONE);
+				}
 			}
+		} catch (JSONException e){
+			e.printStackTrace();
 		}
 		
 	}
@@ -267,55 +312,67 @@ public class HomeFragment extends Fragment{
 	 * 顶部广告
 	 * @param adList  广告信息数组
 	 */
-	public void initHeadAd(ArrayList<AdList> adList){
-		mHandler.removeMessages(SHOW_NEXT);
-		mAdViewPager.removeAllViews();
-		mAdPoint.removeAllViews();
-		mAdData.clear();
-		mAdPointData.clear();
-		for(int i =0 ; i<adList.size() ; i++){
-			AdList ad = adList.get(i);
-			ImageView imageView = new ImageView(HomeFragment.this.getActivity());
-			imageView.setScaleType(ScaleType.FIT_XY);
-			imageView.setImageResource(R.drawable.dic_av_item_pic_bg);
-			imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
-			imageLoader.displayImage(ad.getImage(), imageView, options,animateFirstListener);
-			mAdData.add(imageView);
-			ImageView imageViewPoint = new ImageView(HomeFragment.this.getActivity());
-			LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,1);
-			imageViewPoint.setLayoutParams(pointParams);
-			imageViewPoint.setImageResource(R.drawable.home_point);
-			
-			mAdPointData.add(imageViewPoint);
-			mAdPoint.addView(imageViewPoint);
+	public void initHeadAd(String json){
+		ArrayList<AdList> adList = null;
+		try{
+			JSONObject itemObj = new JSONObject(json);
+			String item = itemObj.getString("item");
+			if(!item.equals("[]")){
+				 adList =AdList.newInstance(item);
+			}
+		} catch (JSONException e){
+			e.printStackTrace();
 		}
-		AdViewPagerAdapter adViewPagerAdapter = new AdViewPagerAdapter(mAdData);
-		mAdViewPager.setAdapter(adViewPagerAdapter); 
-		mAdViewPager.addOnPageChangeListener(new OnPageChangeListener(){
-
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
+		if(adList.size() > 0 && adList != null){
+			mHandler.removeMessages(SHOW_NEXT);
+			mAdViewPager.removeAllViews();
+			mAdPoint.removeAllViews();
+			mAdData.clear();
+			mAdPointData.clear();
+			for(int i =0 ; i<adList.size() ; i++){
+				AdList ad = adList.get(i);
+				ImageView imageView = new ImageView(HomeFragment.this.getActivity());
+				imageView.setScaleType(ScaleType.FIT_XY);
+				imageView.setImageResource(R.drawable.dic_av_item_pic_bg);
+				imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+				imageLoader.displayImage(ad.getImage(), imageView, options,animateFirstListener);
+				mAdData.add(imageView);
+				ImageView imageViewPoint = new ImageView(HomeFragment.this.getActivity());
+				LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,1);
+				imageViewPoint.setLayoutParams(pointParams);
+				imageViewPoint.setImageResource(R.drawable.home_point);
 				
+				mAdPointData.add(imageViewPoint);
+				mAdPoint.addView(imageViewPoint);
 			}
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
+			AdViewPagerAdapter adViewPagerAdapter = new AdViewPagerAdapter(mAdData);
+			mAdViewPager.setAdapter(adViewPagerAdapter); 
+			mAdViewPager.addOnPageChangeListener(new OnPageChangeListener(){
+	
+				@Override
+				public void onPageScrollStateChanged(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+	
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+					// TODO Auto-generated method stub
+					
+				}
+	
+				@Override
+				public void onPageSelected(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
 				
-			}
-
-			@Override
-			public void onPageSelected(int arg0) {
-				// TODO Auto-generated method stub
-				
-			}
+			});
 			
-		});
-		
-		if(mAdData.size()> 0){
-			selectPoint(0);
-			mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
+			if(mAdData.size()> 0){
+				selectPoint(0);
+				mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
+			}
 		}
 	}
 	

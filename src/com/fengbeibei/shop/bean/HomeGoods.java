@@ -33,7 +33,7 @@ public class HomeGoods {
 	}
 	
 	public static ArrayList<HomeGoods> newInstance(String json){
-		ArrayList<HomeGoods> homeGoods = null;
+		ArrayList<HomeGoods> homeGoods = new ArrayList<HomeGoods>();
 		try{
 			JSONArray arr = new JSONArray(json);
 			int size = arr == null ? 0 : arr.length();

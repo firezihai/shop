@@ -27,7 +27,7 @@ public class Home3GridViewAdapter extends BaseAdapter{
 	public Home3GridViewAdapter(Context context) {
 		// TODO Auto-generated constructor stub
 		mContext = context;
-		mInflater   = LayoutInflater.from(context);
+		mInflater   = LayoutInflater.from(mContext);
 	}
 	public void setHome3Data(ArrayList<Home3Data> home3Data){
 		mHome3Data = home3Data;
