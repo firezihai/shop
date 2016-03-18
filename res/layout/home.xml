@@ -74,72 +74,83 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/home_slide_height" >
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/adViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
+			<FrameLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="0dp"
+			    android:background="@color/lightgrey"
+			    android:layout_weight="1">
                 <LinearLayout
-                    android:id="@+id/adPoint"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal" >
-                </LinearLayout>
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp" >
-
-                <Button
-                    android:id="@+id/categoryMenu"
-                    style="@style/HomeMenu"
-                    android:drawableTop="@drawable/icon_menu_category"
-                    android:text="@string/goods_category" />
-
-                <Button
-                    android:id="@+id/ucenterMenu"
-                    style="@style/HomeMenu"
-                    android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_ucenter" />
-
-                <Button
-                    android:id="@+id/orderMenu"
-                    style="@style/HomeMenu"
-                    android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_order" />
-
-                <Button
-                    android:id="@+id/collectMenu"
-                    style="@style/HomeMenu"
-                    android:drawableTop="@drawable/icon_manage"
-                    android:text="@string/my_collect" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#F0F0F0" />
-
-            <LinearLayout
-                android:id="@+id/homeData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-            </LinearLayout>
+                    android:background="@color/lightgrey"
+                    android:orientation="vertical">
+		            <RelativeLayout
+		                android:layout_width="match_parent"
+		                android:layout_height="@dimen/home_slide_height" >
+		
+		                <android.support.v4.view.ViewPager
+		                    android:id="@+id/adViewPager"
+		                    android:layout_width="match_parent"
+		                    android:layout_height="match_parent" />
+		
+		                <LinearLayout
+		                    android:id="@+id/adPoint"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:layout_alignParentBottom="true"
+		                    android:layout_alignParentEnd="true"
+		                    android:layout_alignParentRight="true"
+		                    android:layout_marginBottom="10dp"
+		                    android:orientation="horizontal" >
+		                </LinearLayout>
+		            </RelativeLayout>
+		
+		            <LinearLayout
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:background="@color/white"
+		                android:orientation="horizontal"
+		                android:paddingBottom="5dp"
+		                android:paddingTop="5dp" >
+		
+		                <Button
+		                    android:id="@+id/categoryMenu"
+		                    style="@style/HomeMenu"
+		                    android:drawableTop="@drawable/icon_menu_category"
+		                    android:text="@string/goods_category" />
+		
+		                <Button
+		                    android:id="@+id/ucenterMenu"
+		                    style="@style/HomeMenu"
+		                    android:drawableTop="@drawable/icon_manage"
+		                    android:text="@string/my_ucenter" />
+		
+		                <Button
+		                    android:id="@+id/orderMenu"
+		                    style="@style/HomeMenu"
+		                    android:drawableTop="@drawable/icon_manage"
+		                    android:text="@string/my_order" />
+		
+		                <Button
+		                    android:id="@+id/collectMenu"
+		                    style="@style/HomeMenu"
+		                    android:drawableTop="@drawable/icon_manage"
+		                    android:text="@string/my_collect" />
+		            </LinearLayout>
+		
+		            <View
+		                android:layout_width="match_parent"
+		                android:layout_height="1px"
+		                android:background="#F0F0F0" />
+		
+		            <LinearLayout
+		                android:id="@+id/homeData"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:orientation="vertical" >
+		            </LinearLayout>
+	            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView>
 

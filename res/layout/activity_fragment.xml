@@ -27,6 +27,7 @@
 		     android:id="@+id/homeBtn"
 		     style="@style/MainMenuBtn"
 		     android:drawableTop="@drawable/home_btn_bg"
+		     android:checked="true"
 		     android:text="@string/home"/>
 		   <RadioButton 
 		       android:id="@+id/categoryBtn"
