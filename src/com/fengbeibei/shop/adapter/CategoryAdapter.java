@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class CategoryAdapter extends BaseAdapter{
 	private ArrayList<Category> mCategoryData;
@@ -26,7 +27,7 @@ public class CategoryAdapter extends BaseAdapter{
 	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
 	private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
 	class ViewHolder {
-		Button gcName;
+		TextView gcName;
 		ImageView gcImage;
 	}
 	
@@ -64,7 +65,7 @@ public class CategoryAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = mInflater.inflate(R.layout.parent_category_item, null);
 			holder = new ViewHolder();
-			holder.gcName = (Button)convertView.findViewById(R.id.gcName);
+			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
 			holder.gcImage = (ImageView)convertView.findViewById(R.id.gcImage);
 			convertView.setTag(holder);
 		}else{

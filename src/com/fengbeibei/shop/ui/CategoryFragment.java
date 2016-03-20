@@ -34,6 +34,7 @@ import android.widget.TextView;
 public class CategoryFragment extends Fragment{
 	private ListView mParentCategoryLayout;
 	private LinearLayout mChildCategoryLayout;
+	private CategoryAdapter mCategoryAdapter;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -60,19 +61,16 @@ public class CategoryFragment extends Fragment{
 						JSONObject obj = new JSONObject(json);
 						String categoryJson= (String)obj.getString("class_list");
 						ArrayList<Category> parentCategory = Category.newIntance(categoryJson);
-						CategoryAdapter categoryAdapter = new CategoryAdapter(CategoryFragment.this.getContext());
-						categoryAdapter.setCategoryData(parentCategory);
-						mParentCategoryLayout.setAdapter(categoryAdapter);
+						mCategoryAdapter = new CategoryAdapter(CategoryFragment.this.getContext());
+						mCategoryAdapter.setCategoryData(parentCategory);
+						mParentCategoryLayout.setAdapter(mCategoryAdapter);
 						mParentCategoryLayout.setOnItemClickListener(new OnItemClickListener(){
 
 							@Override
 							public void onItemClick(AdapterView<?> arg0,
 									View arg1, int arg2, long arg3) {
 								// TODO Auto-generated method stub
-								Button btn = (Button)arg1.findViewById(R.id.gcName);
-								Log.d("gcId",arg2+"");
-								btn.setSelected(true);
-								Log.d("gcId",arg2+"");
+								mParentCategoryLayout.setItemChecked(arg2, true);
 								Category category =(Category) mParentCategoryLayout.getItemAtPosition(arg2);
 								if(category != null){
 									getChildCategory(category.getGcId());
@@ -98,7 +96,6 @@ public class CategoryFragment extends Fragment{
 	
 	public void getChildCategory(String gcId){
 		String url = Constants.CHILD_CATEGORY_URL+"&gc_id="+gcId;
-		Log.d("url",url);
 		HttpClientHelper.asynGet(url, new CallBack(){
 
 			@Override

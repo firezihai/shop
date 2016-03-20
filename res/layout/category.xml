@@ -31,12 +31,11 @@
         <ListView
             android:id="@+id/parentCategory"
             android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/lightgrey"
             android:listSelector="@android:color/transparent"
             android:divider= "#b5b5b5"   
-            android:dividerHeight= "1dp" 
-            android:orientation="vertical" >
+            android:dividerHeight= "1dp"  >
         </ListView>
 
         <View

@@ -10,11 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"/>
-    <Button
+    <TextView
         android:id="@+id/gcName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/parent_category_list_view"
         android:background="@color/lightgrey"
+        android:textColor="@drawable/parent_category_list_view"
         android:textSize="12sp"/>
 </LinearLayout>
