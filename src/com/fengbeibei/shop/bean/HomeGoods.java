@@ -39,10 +39,10 @@ public class HomeGoods {
 			int size = arr == null ? 0 : arr.length();
 			for ( int i = 0 ; i < size ; i++){
 				JSONObject obj = arr.getJSONObject(i);
-				String goodsId  = obj.optString(Attr.GOODS_ID);
-				String goodsName = obj.optString(Attr.GOODS_NAME);
-				String goodsPromotionPrice = obj.optString(Attr.GOODS_PROMOTION_PRICE);
-				String goodsImage = obj.optString(Attr.GOODS_IMAGE);
+				String goodsId  = obj.getString(Attr.GOODS_ID);
+				String goodsName = obj.getString(Attr.GOODS_NAME);
+				String goodsPromotionPrice = obj.getString(Attr.GOODS_PROMOTION_PRICE);
+				String goodsImage = obj.getString(Attr.GOODS_IMAGE);
 				homeGoods.add(new HomeGoods(goodsId,goodsName,goodsPromotionPrice,goodsImage));
 			}
 		} catch (JSONException e){

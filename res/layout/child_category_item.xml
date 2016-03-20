@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" xmlns:tools="http://schemas.android.com/tools" tools:context=".activity.HomeActivity">
+    <TextView 
+        android:id="@+id/categoryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+		android:paddingLeft="10dp"
+		android:paddingRight="0dp"
+        android:gravity="start"/>
+
+	<com.fengbeibei.shop.widget.MyGridView
+	    android:id="@+id/categoryGridView"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="5dp"
+	    android:background="@null"
+	    android:columnWidth="@dimen/category_image_size"
+	    android:gravity="center"
+	    android:horizontalSpacing="5dp"
+	    android:listSelector="@null"
+	    android:numColumns="3"
+	    android:verticalSpacing="5dp" >
+</com.fengbeibei.shop.widget.MyGridView>
+</LinearLayout>

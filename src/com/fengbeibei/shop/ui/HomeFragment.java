@@ -287,7 +287,7 @@ public class HomeFragment extends Fragment{
 			String item = itemObj.getString("item");
 			String title = itemObj.getString("title");
 			if ( !item.equals("[]")){
-				ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(json);
+				ArrayList<HomeGoods> homeGoods = HomeGoods.newInstance(item);
 				View homeGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods, null);
 				MyGridView homeGoodsGridView = (MyGridView)homeGoodsView.findViewById(R.id.homeGoodsGridView);
 				HomeGoodsGridViewAdapter homeGoodsGridViewAdapter = new HomeGoodsGridViewAdapter(HomeFragment.this.getContext());

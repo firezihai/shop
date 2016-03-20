@@ -38,4 +38,12 @@ public final class Constants {
 	 * 首页商品列表请求接口
 	 */
 	 public final static String HOME_GOODS_URL = APP_URL + "act=index&op=pull_load";
+	 /**
+	  * 顶级商品分类请求接品
+	  */
+	 public final static String PARENT_CATEGORY_URL = APP_URL+"act=goods_class";
+	 /**
+	  * 子分类商品请求接口
+	  */
+	 public final static String CHILD_CATEGORY_URL = APP_URL+"act=goods_class&op=get_child_list";
 }

@@ -21,7 +21,7 @@ public class SystemHelper {
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.considerExifParams(true)
 		.displayer(new FadeInBitmapDisplayer(000))//Õº∆¨œ‘ æ ±º‰
-		.build();;
+		.build();
 		
 		return options;	
 	}
