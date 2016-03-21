@@ -10,6 +10,7 @@ public class MyApplication extends Application{
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		mContext = getApplicationContext();
+		initImageLoader(this);
 	}
 	
 	public static Context getContext(){

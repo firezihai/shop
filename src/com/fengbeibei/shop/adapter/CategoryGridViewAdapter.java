@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.SystemHelper;
@@ -12,9 +13,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,9 +58,22 @@ public class CategoryGridViewAdapter extends ArrayAdapter<Category>{
 		}
 		holder.gcName.setText(category.getGcName());
 		mImageLoader.displayImage(category.getGcImage(), holder.gcImage, mOptions,  mAnimateFirstListener );
+		setOnClickListener(convertView,category.getGcId());
 		return convertView;
 	}
 
-	
+	public void setOnClickListener(View view,final String data){
+		view.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(mContext,SearchActivity.class);
+				intent.putExtra("gc_id", data);
+				mContext.startActivity(intent);
+			}
+			
+		});
+	}
 
 }

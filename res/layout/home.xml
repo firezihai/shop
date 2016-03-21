@@ -11,6 +11,8 @@
         android:id="@+id/homePullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
         ptr:ptrAnimationStyle="rotate"
         ptr:ptrHeaderBackground="@color/green"
         ptr:ptrHeaderSubTextColor="@color/orange_red"

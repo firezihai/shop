@@ -48,6 +48,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/lightgrey"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
             android:orientation="vertical" >
 
             <LinearLayout

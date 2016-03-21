@@ -46,4 +46,8 @@ public final class Constants {
 	  * 子分类商品请求接口
 	  */
 	 public final static String CHILD_CATEGORY_URL = APP_URL+"act=goods_class&op=get_child_list";
+	 /**
+	  * 购物车商品接口
+	  */
+	 public final static String CART_LIST_URL = APP_URL+"act=cart&op=cart_list";
 }

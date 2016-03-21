@@ -44,6 +44,7 @@ public class CategoryFragment extends Fragment{
 		mChildCategoryLayout = (LinearLayout) categoryLayout.findViewById(R.id.childCategory);
 		
 		initParentCategory();
+
 		getChildCategory("1");
 		return categoryLayout;
 	}
@@ -70,7 +71,7 @@ public class CategoryFragment extends Fragment{
 							public void onItemClick(AdapterView<?> arg0,
 									View arg1, int arg2, long arg3) {
 								// TODO Auto-generated method stub
-								mParentCategoryLayout.setItemChecked(arg2, true);
+								arg1.setSelected(true);
 								Category category =(Category) mParentCategoryLayout.getItemAtPosition(arg2);
 								if(category != null){
 									getChildCategory(category.getGcId());

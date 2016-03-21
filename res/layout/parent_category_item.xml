@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@android:color/transparent"
     android:orientation="horizontal">
     <ImageView 
         android:id="@+id/gcImage"
@@ -15,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/lightgrey"
+        android:duplicateParentState="true"
         android:textColor="@drawable/parent_category_list_view"
         android:textSize="12sp"/>
 </LinearLayout>
