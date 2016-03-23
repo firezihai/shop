@@ -21,7 +21,7 @@
 	<string name="account_edit_placeholder">用户名/手机号/邮箱</string>
 	<string name="password">密码</string>
 	<string name="password_edit_placeholder">请输入密码</string>
-	<string name="find_password">找回密码</string>
+	<string name="forget_password">忘记密码</string>
 	<string name="free_reg">免费注册</string>
 	<string name="wx_login">微信登陆</string>
 	<string name="qq_login">QQ登陆</string>

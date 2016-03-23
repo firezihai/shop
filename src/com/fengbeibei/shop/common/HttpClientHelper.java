@@ -222,6 +222,7 @@ public class HttpClientHelper {
 				}
 				handler.sendMessage(msg);
 			}
+			
 		});
 	}
 

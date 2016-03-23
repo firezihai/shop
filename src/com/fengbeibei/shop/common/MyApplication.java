@@ -12,9 +12,9 @@ import android.app.Application;
 import android.content.Context;
 
 public class MyApplication extends Application{
-	private boolean LOGIN_STATE = false;
 	private static Context mContext;
 	private static MyApplication mIntance;
+	private static boolean mIsLogin = false;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -29,7 +29,7 @@ public class MyApplication extends Application{
 		return mContext;
 	}
 	public boolean isLogin(){
-		return LOGIN_STATE;
+		return mIsLogin;
 	}
 	
 	public void loaderUserInfo(){
