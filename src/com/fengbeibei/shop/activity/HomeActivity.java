@@ -52,6 +52,9 @@ public class HomeActivity extends FragmentActivity{
 		mUcenterBtn.setOnClickListener(listener);
 
 	}
+	
+
+
 	class HomeRadioButtonClickListener implements View.OnClickListener{
 		
 		@Override
@@ -65,7 +68,14 @@ public class HomeActivity extends FragmentActivity{
 				 intoCategory();
 				 break;
 			case R.id.cartBtn :
-				intoCart();;
+				if (!MyApplication.getInstance().isLogin()){
+					Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+					mHomeBtn.setChecked(true);
+					mCartBtn.setChecked(false);
+					startActivity(intent);
+				}else{		
+					intoCart();
+				}
 				break;
 			case R.id.ucenterBtn :
 				intoUcenter();

@@ -1,7 +1,10 @@
 package com.fengbeibei.shop.common;
 
+import android.os.Environment;
+
 public final class Constants {
-	
+	public final static String CACHE_DIR_IMAGE;
+	public final static String CACHE_DIR;
 	public final static String APP_CODE = "shop.fengbeibei.com";
 	/**
 	 * 与服务器端连接协义
@@ -50,4 +53,13 @@ public final class Constants {
 	  * 购物车商品接口
 	  */
 	 public final static String CART_LIST_URL = APP_URL+"act=cart&op=cart_list";
+	 
+	 static{
+		 if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
+			 CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/fengbeibei/"; 
+		 }else{
+			 CACHE_DIR = Environment.getRootDirectory().getAbsolutePath() + "/fengbeibei/";
+		 }
+		 CACHE_DIR_IMAGE = CACHE_DIR + "/image/";
+	 }
 }

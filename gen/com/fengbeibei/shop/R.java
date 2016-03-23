@@ -2132,32 +2132,35 @@ containing a value of this type.
         public static final int default_ptr_flip=0x7f020041;
         public static final int default_ptr_rotate=0x7f020042;
         public static final int dic_av_item_pic_bg=0x7f020043;
-        public static final int home_btn_bg=0x7f020044;
-        public static final int home_point=0x7f020045;
-        public static final int ic_launcher=0x7f020046;
-        public static final int icon_back=0x7f020047;
-        public static final int icon_cart=0x7f020048;
-        public static final int icon_cart_on=0x7f020049;
-        public static final int icon_collect=0x7f02004a;
-        public static final int icon_home=0x7f02004b;
-        public static final int icon_home_on=0x7f02004c;
-        public static final int icon_manage=0x7f02004d;
-        public static final int icon_menu_category=0x7f02004e;
-        public static final int icon_message=0x7f02004f;
-        public static final int icon_order=0x7f020050;
-        public static final int icon_scan=0x7f020051;
-        public static final int icon_search=0x7f020052;
-        public static final int icon_tabulation=0x7f020053;
-        public static final int icon_tabulation_on=0x7f020054;
-        public static final int icon_ucenter=0x7f020055;
-        public static final int icon_ucenter_on=0x7f020056;
-        public static final int icon_xin=0x7f020057;
-        public static final int main_menu_btn_text_color=0x7f020058;
-        public static final int notification_template_icon_bg=0x7f02005d;
-        public static final int parent_category_list_view=0x7f020059;
-        public static final int point=0x7f02005a;
-        public static final int point_on=0x7f02005b;
-        public static final int ucenter_btn_bg=0x7f02005c;
+        public static final int editview_focused=0x7f020044;
+        public static final int home_btn_bg=0x7f020045;
+        public static final int home_point=0x7f020046;
+        public static final int ic_launcher=0x7f020047;
+        public static final int icon_back=0x7f020048;
+        public static final int icon_cart=0x7f020049;
+        public static final int icon_cart_on=0x7f02004a;
+        public static final int icon_collect=0x7f02004b;
+        public static final int icon_home=0x7f02004c;
+        public static final int icon_home_on=0x7f02004d;
+        public static final int icon_manage=0x7f02004e;
+        public static final int icon_menu_category=0x7f02004f;
+        public static final int icon_message=0x7f020050;
+        public static final int icon_order=0x7f020051;
+        public static final int icon_qq=0x7f020052;
+        public static final int icon_scan=0x7f020053;
+        public static final int icon_search=0x7f020054;
+        public static final int icon_tabulation=0x7f020055;
+        public static final int icon_tabulation_on=0x7f020056;
+        public static final int icon_ucenter=0x7f020057;
+        public static final int icon_ucenter_on=0x7f020058;
+        public static final int icon_weixin=0x7f020059;
+        public static final int icon_xin=0x7f02005a;
+        public static final int main_menu_btn_text_color=0x7f02005b;
+        public static final int notification_template_icon_bg=0x7f020060;
+        public static final int parent_category_list_view=0x7f02005c;
+        public static final int point=0x7f02005d;
+        public static final int point_on=0x7f02005e;
+        public static final int ucenter_btn_bg=0x7f02005f;
     }
     public static final class id {
         public static final int action0=0x7f09007a;
@@ -2375,22 +2378,23 @@ containing a value of this type.
         public static final int home_item2=0x7f030022;
         public static final int home_item3=0x7f030023;
         public static final int home_item3_grid_item=0x7f030024;
-        public static final int notification_media_action=0x7f030025;
-        public static final int notification_media_cancel_action=0x7f030026;
-        public static final int notification_template_big_media=0x7f030027;
-        public static final int notification_template_big_media_narrow=0x7f030028;
-        public static final int notification_template_lines=0x7f030029;
-        public static final int notification_template_media=0x7f03002a;
-        public static final int notification_template_part_chronometer=0x7f03002b;
-        public static final int notification_template_part_time=0x7f03002c;
-        public static final int parent_category_item=0x7f03002d;
-        public static final int pull_to_refresh_header_horizontal=0x7f03002e;
-        public static final int pull_to_refresh_header_vertical=0x7f03002f;
-        public static final int select_dialog_item_material=0x7f030030;
-        public static final int select_dialog_multichoice_material=0x7f030031;
-        public static final int select_dialog_singlechoice_material=0x7f030032;
-        public static final int support_simple_spinner_dropdown_item=0x7f030033;
-        public static final int ucenter=0x7f030034;
+        public static final int login_activity=0x7f030025;
+        public static final int notification_media_action=0x7f030026;
+        public static final int notification_media_cancel_action=0x7f030027;
+        public static final int notification_template_big_media=0x7f030028;
+        public static final int notification_template_big_media_narrow=0x7f030029;
+        public static final int notification_template_lines=0x7f03002a;
+        public static final int notification_template_media=0x7f03002b;
+        public static final int notification_template_part_chronometer=0x7f03002c;
+        public static final int notification_template_part_time=0x7f03002d;
+        public static final int parent_category_item=0x7f03002e;
+        public static final int pull_to_refresh_header_horizontal=0x7f03002f;
+        public static final int pull_to_refresh_header_vertical=0x7f030030;
+        public static final int select_dialog_item_material=0x7f030031;
+        public static final int select_dialog_multichoice_material=0x7f030032;
+        public static final int select_dialog_singlechoice_material=0x7f030033;
+        public static final int support_simple_spinner_dropdown_item=0x7f030034;
+        public static final int ucenter=0x7f030035;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -2452,16 +2456,24 @@ containing a value of this type.
         /**  Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] 
          */
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
+        public static final int account=0x7f0a0028;
+        public static final int account_edit_placeholder=0x7f0a0029;
         public static final int app_name=0x7f0a0018;
+        public static final int cancel=0x7f0a0025;
         public static final int cart=0x7f0a001a;
         public static final int category=0x7f0a001b;
+        public static final int find_password=0x7f0a002c;
+        public static final int free_reg=0x7f0a002d;
         public static final int goods_category=0x7f0a0020;
         public static final int guess_like_love=0x7f0a0024;
         public static final int home=0x7f0a0019;
+        public static final int login=0x7f0a0026;
         public static final int message=0x7f0a001e;
         public static final int my_collect=0x7f0a0023;
         public static final int my_order=0x7f0a0022;
         public static final int my_ucenter=0x7f0a0021;
+        public static final int password=0x7f0a002a;
+        public static final int password_edit_placeholder=0x7f0a002b;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
         public static final int pull_to_refresh_from_bottom_pull_label=0x7f0a0015;
@@ -2470,6 +2482,8 @@ containing a value of this type.
         public static final int pull_to_refresh_pull_label=0x7f0a0012;
         public static final int pull_to_refresh_refreshing_label=0x7f0a0014;
         public static final int pull_to_refresh_release_label=0x7f0a0013;
+        public static final int qq_login=0x7f0a002f;
+        public static final int register=0x7f0a0027;
         public static final int scan=0x7f0a001d;
         public static final int search_goods=0x7f0a001f;
         /**  Text to use when the number in a notification info is too large
@@ -2480,6 +2494,7 @@ containing a value of this type.
          */
         public static final int status_bar_notification_info_overflow=0x7f0a0011;
         public static final int ucenter=0x7f0a001c;
+        public static final int wx_login=0x7f0a002e;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f0b0041;

@@ -172,5 +172,57 @@ public class HttpClientHelper {
 		});
 	}
 	
+	public static void asycPost(final String url,final HashMap<String,String> params,final CallBack callback){
+		final Handler handler = new Handler(){
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				callback.onFinish(msg);
+			}
+			
+		};
+		threadPool.execute(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Message msg = handler.obtainMessage(HttpStatus.SC_OK);
+				msg.getData().getBoolean(HASMORE,false);
+				try{
+					String json = post(url,params);
+					if(json != null && !"".equals(json) && !"null".equalsIgnoreCase(json) ){
+						// 注意:目前服务器返回的JSON数据串中会有特殊字符（如换行）。需要处理一下 assic码x0a换行 ,x0d回车
+						json = json.replaceAll("\\x0a|\\x0d", json);
+						JSONObject jsonObj = new JSONObject(json);
+						if(jsonObj != null && jsonObj.has(CODE)){
+							msg.what = Integer.valueOf(jsonObj.getString(CODE));
+							if(jsonObj.has(DATAS)){
+								msg.obj = jsonObj.has(DATAS);
+							}
+							if(jsonObj.has(HASMORE)){
+								msg.getData().putBoolean(DATAS, jsonObj.getBoolean(HASMORE));
+							}
+							if (jsonObj.has(RESULT)){
+								msg.getData().putString(RESULT, jsonObj.getString(RESULT));
+							}
+							if (jsonObj.has(COUNT)){
+								msg.getData().putLong(COUNT, jsonObj.getLong(COUNT));
+							}
+						}else{
+							msg.what = HttpStatus.SC_REQUEST_TIMEOUT;
+						}
+					}
+				} catch (IOException e){
+					msg.what = HttpStatus.SC_REQUEST_TIMEOUT;
+					e.printStackTrace();
+				} catch (JSONException e) {
+					msg.what = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+					e.printStackTrace();
+				}
+				handler.sendMessage(msg);
+			}
+		});
+	}
 
 }
