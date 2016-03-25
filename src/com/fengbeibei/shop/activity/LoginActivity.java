@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity{
 	private EditText mAccountEdit;
@@ -83,8 +84,6 @@ public class LoginActivity extends Activity{
 				}else{
 					changeButtonStyle(R.style.BtnDisable);
 				}
-				Log.d("sdk_int",Build.VERSION.SDK_INT + "");
-				Log.d("Build.VERSION_CODES",Build.VERSION_CODES.M +"");
 				mPasswordStr = mPasswordEdit.getText().toString();
 			}
 
@@ -111,6 +110,7 @@ public class LoginActivity extends Activity{
 				HashMap<String,String> params = new HashMap<String,String>();
 				params.put("username", mAccountStr);
 				params.put("password", mPasswordStr);
+				params.put("client","android");
 				HttpClientHelper.asynPost(Constants.LOGIN_URL,params,new CallBack(){
 
 					@Override
@@ -120,14 +120,21 @@ public class LoginActivity extends Activity{
 							String json = (String)response.obj;
 							try{
 								JSONObject obj = new JSONObject(json);
-								if(!obj.isNull("key")){
-									MyApplication.getInstance().setLoginKey("user.key", obj.getString("key"));
-									LoginActivity.this.finish();
+								
+								if (obj.has("error")){
+									String error = obj.getString("error");
+									Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+									return;
 								}
+								Log.d("LoginActivity", json);
+								MyApplication.getInstance().setLoginKey("user.key", obj.getString("key"));
+								LoginActivity.this.finish();
 							} catch (JSONException e){
 								e.printStackTrace();
 							}
+								
 							
+						//		LoginActivity.this.finish();
 						}
 					}
 

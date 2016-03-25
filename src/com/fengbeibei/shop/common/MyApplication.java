@@ -35,7 +35,13 @@ public class MyApplication extends Application{
 	 * @return
 	 */
 	public boolean isLogin(){
+		String key = getLoginKey();
+		String isLogin = getProperty("user.login_state");
+		if(key != null && !"".equals(key) && isLogin != null &&  isLogin.equals("1")){
+			mIsLogin = true;
+		}
 		return mIsLogin;
+		
 	}
 	/**
 	 * »ñÈ¡µÇÂ½key
@@ -67,6 +73,7 @@ public class MyApplication extends Application{
 	public void setUserInfo(final User user){
 		setProperties(new Properties(){
 			{
+				setProperty("user.login_state","1");
 				setProperty("user.name",user.getUserName());
 				setProperty("user.avatar",user.getUserAvatar());
 				setProperty("user.point",user.getPoint());
@@ -93,7 +100,6 @@ public class MyApplication extends Application{
 	 */
 	@SuppressWarnings("serial")
 	public void setLoginKey(final String key,final String value){
-		this.mIsLogin = true;
 		setProperty(key,value);
 	}
 	/**

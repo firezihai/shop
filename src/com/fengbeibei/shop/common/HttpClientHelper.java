@@ -196,9 +196,9 @@ public class HttpClientHelper {
 						json = json.replaceAll("\\x0a|\\x0d", json);
 						JSONObject jsonObj = new JSONObject(json);
 						if(jsonObj != null && jsonObj.has(CODE)){
-							msg.what = Integer.valueOf(jsonObj.getString(CODE));
+					//		msg.what = Integer.valueOf(jsonObj.getString(CODE));
 							if(jsonObj.has(DATAS)){
-								msg.obj = jsonObj.has(DATAS);
+								msg.obj = jsonObj.getString(DATAS);
 							}
 							if(jsonObj.has(HASMORE)){
 								msg.getData().putBoolean(DATAS, jsonObj.getBoolean(HASMORE));
@@ -212,6 +212,8 @@ public class HttpClientHelper {
 						}else{
 							msg.what = HttpStatus.SC_REQUEST_TIMEOUT;
 						}
+					}else{
+						msg.what = HttpStatus.SC_INTERNAL_SERVER_ERROR;
 					}
 				} catch (IOException e){
 					msg.what = HttpStatus.SC_REQUEST_TIMEOUT;

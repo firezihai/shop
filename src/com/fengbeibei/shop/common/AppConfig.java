@@ -38,8 +38,9 @@ public class AppConfig {
 	public static AppConfig intance(Context context){
 		if (appConfig == null){
 			appConfig = new AppConfig();
+			appConfig.mContext = context;
 		}
-		appConfig.mContext = context;
+		
 		return appConfig;
 	}
 	/**

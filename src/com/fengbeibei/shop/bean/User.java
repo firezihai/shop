@@ -21,15 +21,15 @@ public class User {
 	public static class Attr{
 		public static final String USER_ID = "user_id";
 		public static final String USER_NAME = "user_name";
-		public static final String USER_AVATAR = "user_avatar";
+		public static final String USER_AVATAR = "avator";
 		public static final String POINT = "point";
-		public static final String PREDEPOSIT= "predeposit";
+		public static final String PREDEPOSIT= "predepoit";
 		public static final String VOUCHER_COUNT = "voucher_count";
 		public static final String AVAILABLE_RC_BALANCE = "available_rc_balance";
 		public static final String ORDER_NOPAY_COUNT = "order_nopay_count";
 		public static final String ORDER_NORECEIPT_COUNT = "order_noreceipt_count";
 		public static final String ORDER_NOSHIP_COUNT = "order_noship_count";
-		public static final String ORDER_NOCOMMENT_COUNT = "order_nocomment_count'";
+		public static final String ORDER_NOCOMMENT_COUNT = "order_nocomment_count";
 		public static final String FRIEND_COUNT = "friend_count";
 		public static final String FAVORITES_COUNT = "favorites_count";
 		public static final String INVITE_QRCODE = "invite_qrcode";
@@ -83,21 +83,23 @@ public class User {
 		User user = null;
 		try{
 			JSONObject obj = new JSONObject(json);
-			if(obj.length() > 0){
-				String user_id = obj.getString(Attr.USER_ID);
-				String user_name = obj.getString(Attr.USER_NAME);
-				String user_avatar = obj.getString(Attr.USER_AVATAR);
-				String point = obj.getString(Attr.POINT);
-				String predeposit = obj.getString(Attr.PREDEPOSIT);
-				String voucherCount = obj.getString(Attr.VOUCHER_COUNT);
-				String availableRcBalance = obj.getString(Attr.AVAILABLE_RC_BALANCE);
-				String orderNopayCount = obj.getString(Attr.ORDER_NOPAY_COUNT);
-				String orderNoshipCount = obj.getString(Attr.ORDER_NOSHIP_COUNT);
-				String orderNoreceiptCount = obj.getString(Attr.ORDER_NORECEIPT_COUNT);
-				String orderNocommentCount = obj.getString(Attr.ORDER_NOCOMMENT_COUNT);
-				String friendCount = obj.getString(Attr.FRIEND_COUNT);
-				String favoritesCount = obj.getString(Attr.FAVORITES_COUNT);
-				String inviteQrcode = obj.getString(Attr.INVITE_QRCODE);
+			String infoJson = obj.getString("member_info");
+			JSONObject infoObj = new JSONObject(infoJson);
+			if(infoObj.length() > 0){
+				String user_id = "1";
+				String user_name = infoObj.getString(Attr.USER_NAME);
+				String user_avatar = infoObj.getString(Attr.USER_AVATAR);
+				String point = infoObj.getString(Attr.POINT);
+				String predeposit = infoObj.getString(Attr.PREDEPOSIT);
+				String voucherCount = infoObj.getString(Attr.VOUCHER_COUNT);
+				String availableRcBalance = infoObj.getString(Attr.AVAILABLE_RC_BALANCE);
+				String orderNopayCount = infoObj.getString(Attr.ORDER_NOPAY_COUNT);
+				String orderNoshipCount = infoObj.getString(Attr.ORDER_NOSHIP_COUNT);
+				String orderNoreceiptCount = infoObj.getString(Attr.ORDER_NORECEIPT_COUNT);
+				String orderNocommentCount = infoObj.getString(Attr.ORDER_NOCOMMENT_COUNT);
+				String friendCount = infoObj.getString(Attr.FRIEND_COUNT);
+				String favoritesCount = infoObj.getString(Attr.FAVORITES_COUNT);
+				String inviteQrcode = infoObj.getString(Attr.INVITE_QRCODE);
 				user = new User(user_id,user_name,user_avatar,point,predeposit,voucherCount,availableRcBalance,orderNopayCount,orderNoshipCount,orderNoreceiptCount,orderNocommentCount,friendCount,favoritesCount,inviteQrcode);
 			}
 		} catch (JSONException e){

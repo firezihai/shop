@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RadioButton;
@@ -24,7 +25,7 @@ public class HomeActivity extends FragmentActivity{
 	private RadioButton mUcenterBtn;
 	private Fragment mFragment;
 	private FragmentManager mFragmentManager;
-	private int mFragmentId = R.id.fragmentContainer;
+	private int mFragmentId;
 	private HomeFragment mHomeFragment;
 	private CartFragment mCartFragment;
 	private CategoryFragment mCategoryFragment;
@@ -35,6 +36,7 @@ public class HomeActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fragment);
 		mFragmentManager = getSupportFragmentManager();
+		mFragmentId = R.id.fragmentContainer;
 		setRegisterButtonClick();
 		intoHome();
 	}
