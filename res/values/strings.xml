@@ -25,4 +25,17 @@
 	<string name="free_reg">免费注册</string>
 	<string name="wx_login">微信登陆</string>
 	<string name="qq_login">QQ登陆</string>
+	<string name="follow_goods">关注的商品</string>
+	<string name="follow_store">关注的店铺</string>
+	<string name="browsing_history">浏览记录</string>
+	<string name="see_all_order">查看全部订单</string>
+	<string name="wait_pay">待付款</string>
+	<string name="wait_ship">待发货</string>
+	<string name="wait_receipt">待收货</string>
+	<string name="wait_comment">待评价</string>
+	<string name="my_wallet">我的钱包</string>
+	<string name="account_balance">账户余额</string>
+	<string name="point">积分</string>
+	<string name="voucher">代金券</string>
+	<string name="card_top_up">充值卡</string>
 </resources>

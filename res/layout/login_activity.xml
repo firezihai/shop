@@ -107,7 +107,7 @@
 	        android:id="@+id/submit_btn"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	       	android:minHeight="0dp"
+	        style="@style/BtnDisable"
 	       	android:paddingTop="10dp"
 	       	android:paddingBottom="10dp"
 	       	android:layout_marginTop="15dp"
@@ -115,10 +115,8 @@
 	       	android:layout_marginRight="20dp"
 	       	android:layout_marginStart="20dp"
 	       	android:layout_marginEnd="20dp"
-	        android:background="#ececec"
 	        android:text="@string/login"
-	        android:textSize="13sp"
-	        android:textColor="#adadad"/>
+	        android:textSize="13sp"/>
 	    <RelativeLayout 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"

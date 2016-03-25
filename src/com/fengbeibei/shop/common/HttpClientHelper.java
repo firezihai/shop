@@ -172,7 +172,7 @@ public class HttpClientHelper {
 		});
 	}
 	
-	public static void asycPost(final String url,final HashMap<String,String> params,final CallBack callback){
+	public static void asynPost(final String url,final HashMap<String,String> params,final CallBack callback){
 		final Handler handler = new Handler(){
 
 			@Override

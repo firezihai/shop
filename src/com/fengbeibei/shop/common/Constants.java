@@ -3,18 +3,10 @@ package com.fengbeibei.shop.common;
 import android.os.Environment;
 
 public final class Constants {
-	/** 图片缓存目录  */
-	public static final String CACHE_DIR_IMAGE;
-	/** 本地缓存目录  */
-	public static final String CACHE_DIR;
-	static {
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
-			CACHE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/fengbeibei/";
-		}else{
-			CACHE_DIR = Environment.getRootDirectory().getAbsolutePath() + "/fengbeibei/";
-		}
-		CACHE_DIR_IMAGE = CACHE_DIR + "/image";
-	}
+	
+	/**
+	 * 
+	 */
 	public final static String APP_CODE = "shop.fengbeibei.com";
 	/**
 	 * 与服务器端连接协义
@@ -34,7 +26,9 @@ public final class Constants {
 	 * 服务器端应用名称
 	 */
 	public final static String APP = "/mobile";
-	
+	/**
+	 * 分页数
+	 */
 	public final static String PAGESIZE = "20";
 	/**
 	 * 服务器端请求入口
@@ -63,4 +57,12 @@ public final class Constants {
 	  */
 	 public final static String CART_LIST_URL = APP_URL+"act=cart&op=cart_list";
 	 
+	 /**
+	  * 会员登陆接口
+	  */
+	 public final static String LOGIN_URL = APP_URL + "act=login&op=index";
+	 /**
+	  * 会员信息接口
+	  */
+	 public final static String MEMBER_INFO_URL = APP_URL +"act=member_index&op=index";
 }

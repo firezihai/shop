@@ -5,4 +5,8 @@
     <dimen name="indicator_internal_padding">4dp</dimen>
     <dimen name="header_footer_left_right_padding">24dp</dimen>
     <dimen name="header_footer_top_bottom_padding">12dp</dimen>
+    <dimen name="header_height">48dp</dimen>
+    <dimen name="avater_size">60dp</dimen>
+    <dimen name="avater_radius">30dp</dimen>
+    <dimen name="head_icon_size">30dp</dimen>
 </resources>

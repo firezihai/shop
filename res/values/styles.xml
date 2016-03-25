@@ -16,6 +16,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    <style name="app"></style>
 	<style name="MainMenuBtn">
 	    <item name="android:layout_width">0dp</item>
 	    <item name="android:layout_height">match_parent</item>
@@ -40,5 +41,15 @@
 	    <item name="android:background">@null</item>
 	    <item name="android:textColor">@color/darkgrey</item>
 	    <item name="android:textSize">12sp</item>
+	</style>
+	<style name="BtnDisable">
+	    <item name="android:minHeight">0dp</item>
+	    <item name="android:textColor">#adadad</item>
+	    <item name="android:background">#ececec</item>
+	</style>
+	<style name="BtnEnabled">
+	    <item name="android:minHeight">0dp</item>
+	    <item name="android:textColor">@color/white</item>
+	    <item name="android:background">@color/orange</item>
 	</style>
 </resources>

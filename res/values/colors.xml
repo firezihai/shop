@@ -10,4 +10,7 @@
     <color name="orange_red">#ea8010</color>
     <color name="green">#11cd6e</color>
     <color name="price_color">#DB4453</color>
+    <color name="btn_disable_text_color">#adadad</color>
+    <color name="btn_disable_bg_color">#ececec</color>
+    <color name="btn_enable_bg_color">#f25454</color>
 </resources>
