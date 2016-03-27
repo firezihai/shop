@@ -7,12 +7,15 @@ import org.json.JSONObject;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.LoginActivity;
 import com.fengbeibei.shop.bean.User;
+import com.fengbeibei.shop.common.CircleImageDrawable;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.MyApplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -47,10 +50,8 @@ public class UcenterFragment extends Fragment{
 		 Boolean isLogin = mApplication.isLogin();
 		if(key != null && !"".equals(key) && !isLogin){
 			load(key);
-			mUser = mApplication.getUserInfo();
 			initData();
 		} else if(isLogin){
-			mUser = mApplication.getUserInfo();
 			initData();
 		}
 
@@ -59,6 +60,9 @@ public class UcenterFragment extends Fragment{
 	
 	public void initView(View v){
 		mUsername = (TextView) v.findViewById(R.id.username);
+		ImageView mImageView = (ImageView) v.findViewById(R.id.user_avatar);
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_user_avatar); 
+		mImageView.setImageDrawable(new CircleImageDrawable(bitmap));
 		mFollowGoods = (TextView) v.findViewById(R.id.follow_goods);
 		mFollowStore = (TextView) v.findViewById(R.id.follow_store);
 		mWaitPayCount = (TextView) v.findViewById(R.id.wait_pay_count);
@@ -72,6 +76,7 @@ public class UcenterFragment extends Fragment{
 	}
 	
 	public void initData(){
+		mUser = mApplication.getUserInfo();
 		mUsername.setText(mUser.getUserName());
 		mWaitPayCount.setText(mUser.getOrderNopayCount());
 		mWaitShipCount.setText(mUser.getOrderNoshipCount());

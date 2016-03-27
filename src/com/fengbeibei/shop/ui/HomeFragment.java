@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment{
 	 * 记录按下时的位置
 	 */
 	private float downLocation;
+	private LinearLayout mHomeHead;
 	private Button mScanBtn;
 	private Button mMessageBtn;
 	/*轮播广告*/
@@ -91,6 +92,9 @@ public class HomeFragment extends Fragment{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View homeLayout = inflater.inflate(R.layout.home,parent, false);
+		
+		mHomeHead  = (LinearLayout) homeLayout.findViewById(R.id.homeHead);
+		mHomeHead.bringToFront();
 		mPullToRefresh = (PullToRefreshScrollView)homeLayout.findViewById(R.id.homePullToRefresh);
 		mPullToRefresh.setMode(Mode.BOTH);
 		mPullToRefresh.setOnRefreshListener(new OnRefreshListener2<ScrollView>(){
@@ -98,6 +102,7 @@ public class HomeFragment extends Fragment{
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ScrollView> refreshView) {
+				mHomeHead.setVisibility(View.GONE);
 				// TODO Auto-generated method stub
 				initData();
 			}
@@ -163,6 +168,7 @@ public class HomeFragment extends Fragment{
 			public void onFinish(Message response) {
 				// TODO Auto-generated method stub
 				mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
+				mHomeHead.setVisibility(View.VISIBLE);
 				if(response.what == HttpStatus.SC_OK){
 					
 					mHomeData.removeAllViews();
@@ -211,6 +217,7 @@ public class HomeFragment extends Fragment{
 			@Override
 			public void onFinish(Message response) {
 				mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
+
 				// TODO Auto-generated method stub
 				if (response.what == HttpStatus.SC_OK){
 					String json = (String)response.obj;
