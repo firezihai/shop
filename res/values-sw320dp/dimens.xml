@@ -6,4 +6,5 @@
     <dimen name="home2_height2">65dp</dimen>
     <dimen name="home2_width">160dp</dimen>
     <dimen name="home_goods_size">160dp</dimen>
+    <dimen name="category_image_size">80dp</dimen>
 </resources>

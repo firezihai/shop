@@ -50,7 +50,7 @@ public class Home3Data {
 		mData = data;
 	}
 	/**
-	 * 获取项目
+	 * 鑾峰彇椤圭洰
 	 * @param json
 	 * @return
 	 */

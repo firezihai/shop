@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="half_width">120dp</dimen>
-    <dimen name="home_slide_height">120dp</dimen>
-    <dimen name="home2_height1">97dp</dimen>
-    <dimen name="home2_height2">48.5dp</dimen>
-    <dimen name="home2_width">120dp</dimen>
-    <dimen name="home_goods_size">120dp</dimen>
-    <dimen name="category_image_size">60dp</dimen>
+    <dimen name="half_width">80dp</dimen>
+    <dimen name="home_slide_height">80dp</dimen>
+    <dimen name="home2_height1">65dp</dimen>
+    <dimen name="home2_height2">32.5dp</dimen>
+    <dimen name="home2_width">80dp</dimen>
+    <dimen name="home_goods_size">80dp</dimen>
+    <dimen name="category_image_size">40dp</dimen>
 </resources>

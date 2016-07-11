@@ -196,6 +196,7 @@
       		            android:textSize="12sp"
       		            android:textColor="@color/black"/>
       		        <TextView 
+      		            android:id="@+id/seeAllOrder"
       		            android:layout_width="wrap_content"
       		            android:layout_height="wrap_content"
       		            android:layout_alignParentRight="true"
@@ -217,6 +218,7 @@
       		        <RelativeLayout
       		            android:layout_width="0dp"
       		            android:layout_height="wrap_content"
+      		            android:layout_gravity="center_horizontal"
       		            android:layout_weight="1" >
 	      		        <TextView
 	      		            android:id="@+id/wait_pay"
@@ -235,6 +237,7 @@
 	      		            android:layout_height="wrap_content"
 	      		            android:layout_alignRight="@id/wait_pay"
 	      		            android:layout_alignEnd="@id/wait_pay"
+	      		            android:visibility="gone"
 	      		            android:text="0"
 	      		            android:textSize="10sp"
 	      		            android:textColor="@color/price_color"/>
@@ -242,6 +245,7 @@
 	      			<RelativeLayout
       		            android:layout_width="0dp"
       		            android:layout_height="wrap_content"
+      		            android:layout_gravity="center_horizontal"
       		            android:layout_weight="1" >
 	      		        <TextView
 	      		            android:id="@+id/wait_ship"
@@ -263,6 +267,7 @@
 	      		            android:paddingLeft="4dp"
 	      		            android:paddingRight="4dp"
 	      		            android:background="@drawable/ucenter_order_hint_bg"
+	      		            android:visibility="gone"
 	      		            android:text="0"
 	      		            android:textSize="10sp"
 	      		            android:textColor="@color/white"/>
@@ -270,11 +275,13 @@
 	      		     <RelativeLayout 
 	      		         android:layout_width="0dp"
 	      		         android:layout_height="wrap_content"
+	      		         android:layout_gravity="center_horizontal"
 	      		         android:layout_weight="1">
 	      		        <TextView
 	      		            android:id="@+id/wait_receipt"
 	      		            android:layout_width="wrap_content"
 	      		            android:layout_height="wrap_content"
+	      		            android:layout_centerInParent="true"
 	      		            android:gravity="center"
 	      		            android:drawableTop="@drawable/icon_wait_receipt"
 	      		            android:drawablePadding="3dp"
@@ -287,6 +294,7 @@
 	      		            android:layout_height="wrap_content"
 	      		            android:layout_alignRight="@id/wait_receipt"
 	      		            android:layout_alignEnd="@id/wait_receipt"
+	      		            android:visibility="gone"
 	      		            android:text="0"
 	      		            android:textSize="10sp"
 	      		            android:textColor="@color/price_color"/>
@@ -299,6 +307,7 @@
 				            android:id="@+id/wait_comment"
 	      		           	android:layout_width="wrap_content"
 	      		            android:layout_height="wrap_content"
+	      		            android:layout_centerInParent="true"
 	      		            android:gravity="center"
 	      		            android:drawableTop="@drawable/icon_wait_comment"
 	      		            android:drawablePadding="3dp"
@@ -311,6 +320,7 @@
 	      		            android:layout_height="wrap_content"
 	      		            android:layout_alignRight="@id/wait_comment"
 	      		            android:layout_alignEnd="@id/wait_comment"
+	      		            android:visibility="gone"
 	      		            android:text="0"
 	      		            android:textSize="10sp"
 	      		            android:textColor="@color/price_color"/>

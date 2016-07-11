@@ -40,7 +40,6 @@ import org.json.JSONObject;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 @SuppressWarnings("deprecation")
 public class HttpClientHelper {
@@ -64,18 +63,18 @@ public class HttpClientHelper {
 			HttpParams httpParams = new BasicHttpParams();
 		    HttpProtocolParams.setVersion(httpParams, HttpVersion.HTTP_1_1);
 		    HttpProtocolParams.setUseExpectContinue(httpParams, false);
-			// ÉèÖÃ×î´óÁ¬½ÓÊı  
+			// è®¾ç½®æœ€å¤§è¿æ¥æ•°  
 
-			// ÉèÖÃ×î´óÁ¬½ÓÊı  
+			// è®¾ç½®æœ€å¤§è¿æ¥æ•°  
 	        ConnManagerParams.setMaxTotalConnections(httpParams, 10000);  
-	        // ÉèÖÃ»ñÈ¡Á¬½ÓµÄ×î´óµÈ´ıÊ±¼ä  
+	        // è®¾ç½®è·å–è¿æ¥çš„æœ€å¤§ç­‰å¾…æ—¶é—´  
 	        ConnManagerParams.setTimeout(httpParams, 60000);  
-	        // ÉèÖÃÃ¿¸öÂ·ÓÉ×î´óÁ¬½ÓÊı  
+	        // è®¾ç½®æ¯ä¸ªè·¯ç”±æœ€å¤§è¿æ¥æ•°  
 	        ConnPerRouteBean connPerRoute = new ConnPerRouteBean(10000);
 	        ConnManagerParams.setMaxConnectionsPerRoute(httpParams,connPerRoute);  
-	        // ÉèÖÃÁ¬½Ó³¬Ê±Ê±¼ä  
+	        // è®¾ç½®è¿æ¥è¶…æ—¶æ—¶é—´  
 	        HttpConnectionParams.setConnectionTimeout(httpParams, 100000);
-	        // ÉèÖÃ¶ÁÈ¡³¬Ê±Ê±¼ä  
+	        // è®¾ç½®è¯»å–è¶…æ—¶æ—¶é—´  
 	        HttpConnectionParams.setSoTimeout(httpParams, 100000);
 			ClientConnectionManager connManager = new  ThreadSafeClientConnManager(httpParams, schreg);
 			
@@ -192,7 +191,7 @@ public class HttpClientHelper {
 				try{
 					String json = post(url,params);
 					if(json != null && !"".equals(json) && !"null".equalsIgnoreCase(json) ){
-						// ×¢Òâ:Ä¿Ç°·şÎñÆ÷·µ»ØµÄJSONÊı¾İ´®ÖĞ»áÓĞÌØÊâ×Ö·û£¨Èç»»ĞĞ£©¡£ĞèÒª´¦ÀíÒ»ÏÂ assicÂëx0a»»ĞĞ ,x0d»Ø³µ
+						// æ³¨æ„:ç›®å‰æœåŠ¡å™¨è¿”å›çš„JSONæ•°æ®ä¸²ä¸­ä¼šæœ‰ç‰¹æ®Šå­—ç¬¦ï¼ˆå¦‚æ¢è¡Œï¼‰ã€‚éœ€è¦å¤„ç†ä¸€ä¸‹ assicç x0aæ¢è¡Œ ,x0då›è½¦
 						json = json.replaceAll("\\x0a|\\x0d", json);
 						JSONObject jsonObj = new JSONObject(json);
 						if(jsonObj != null && jsonObj.has(CODE)){

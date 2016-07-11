@@ -12,7 +12,7 @@
             android:id="@+id/cancel_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/lightgrey"
+            android:background="@null"
             android:button="@null"
             android:minHeight="0dp"
             android:layout_alignParentLeft="true"
@@ -146,7 +146,7 @@
 	</LinearLayout>
 	<LinearLayout 
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
+	    android:layout_height="49dp"
 	    android:layout_alignParentBottom="true"
 	    android:orientation="vertical">
 		<View
@@ -155,9 +155,10 @@
 		    android:background="@color/grey"/>
 		<LinearLayout 
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
+		    android:layout_height="match_parent"
 		    android:background="@color/white"
 		    android:padding="10dp"
+		    android:weightSum="2"
 		    android:layout_gravity="center_horizontal"
 		    android:orientation="horizontal">
 		    <LinearLayout
@@ -165,6 +166,7 @@
 		        android:layout_height="wrap_content"
 				android:layout_weight="1"
 			    android:gravity="center"
+			    android:background="@color/white"
 				android:orientation="horizontal">
 				<ImageView
 				    android:layout_width="wrap_content"
@@ -176,9 +178,8 @@
 		    	<Button 
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:minHeight="0dp"
 			        android:gravity="center_vertical"
-			        android:background="@color/white"
+			        android:background="@null"
 			        android:text="@string/wx_login"
 			        android:textColor="@color/darkgrey"
 			        android:textSize="12sp"/>
@@ -188,6 +189,7 @@
 		        android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:gravity="center_vertical|center_horizontal"
+				android:background="@color/white"
 				android:orientation="horizontal">
 		    	<ImageView
 		    	    android:layout_width="wrap_content"
@@ -196,12 +198,12 @@
 		    	    android:layout_marginEnd="5dp"
 		    	    android:layout_marginRight="5dp"
 		    	    android:src="@drawable/icon_qq"/>
-			    <Button 
+			  <Button 
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:minHeight="0dp"
 			        android:gravity="center_vertical"
-			        android:background="@color/white"
+			        android:background="@null"
+			        android:button="@null"
 			        android:text="@string/qq_login"
 			        android:textColor="@color/darkgrey"
 			        android:textSize="12sp"/>

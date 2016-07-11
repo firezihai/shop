@@ -3,6 +3,7 @@ package com.fengbeibei.shop.adapter;
 import java.util.ArrayList;
 
 import com.fengbeibei.shop.R;
+import com.fengbeibei.shop.R.color;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.bean.Category;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
@@ -20,9 +21,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CategoryAdapter extends BaseAdapter{
+	private int selectedPosition = -1;
 	private ArrayList<Category> mCategoryData;
 	private LayoutInflater mInflater;
 	private Context mContext;
@@ -32,6 +35,7 @@ public class CategoryAdapter extends BaseAdapter{
 	class ViewHolder {
 		TextView gcName;
 		ImageView gcImage;
+		LinearLayout gcItem;
 	}
 	
 	public CategoryAdapter(Context context) {
@@ -66,8 +70,9 @@ public class CategoryAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if(convertView == null){
-			convertView = mInflater.inflate(R.layout.parent_category_item, null);
+			convertView = mInflater.inflate(R.layout.parent_category_item, arg2,false);
 			holder = new ViewHolder();
+			holder.gcItem = (LinearLayout) convertView.findViewById(R.id.gcItem);
 			holder.gcName = (TextView)convertView.findViewById(R.id.gcName);
 			holder.gcImage = (ImageView)convertView.findViewById(R.id.gcImage);
 			convertView.setTag(holder);
@@ -77,8 +82,19 @@ public class CategoryAdapter extends BaseAdapter{
 		Category categoryData = mCategoryData.get(position);
 		holder.gcName.setText(categoryData.getGcName());
 		mImageLoader.displayImage(categoryData.getGcImage(),holder.gcImage,mOptions, mAnimateFirstListener);
+	  if (selectedPosition == position) {  
+			holder.gcName.setTextColor( mContext.getResources().getColor(R.color.orange));
+        } else {   
+        	holder.gcName.setTextColor( mContext.getResources().getColor(R.color.black));
+        }  
 		return convertView;
 	}
 	
+	public void setSelectedPosition(int position) {  
+        selectedPosition = position;  
+    } 
 	
+	public int getSelectedPosition(){
+		return  selectedPosition;
+	}
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="half_width">210dp</dimen>
+    <dimen name="home_slide_height">210dp</dimen>
+    <dimen name="home2_height1">130dp</dimen>
+    <dimen name="home2_height2">65dp</dimen>
+    <dimen name="home2_width">210dp</dimen>
+    <dimen name="home_goods_size">210dp</dimen>
+</resources>

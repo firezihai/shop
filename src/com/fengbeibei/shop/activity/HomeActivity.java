@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.fengbeibei.shop.R;
@@ -17,12 +18,15 @@ import com.fengbeibei.shop.ui.CartFragment;
 import com.fengbeibei.shop.ui.CategoryFragment;
 import com.fengbeibei.shop.ui.HomeFragment;
 import com.fengbeibei.shop.ui.UcenterFragment;
+import com.fengbeibei.shop.utils.DensityUtils;
+import com.fengbeibei.shop.utils.ScreenUtil;
 
 public class HomeActivity extends FragmentActivity{
 	private RadioButton mHomeBtn;
 	private RadioButton mCategoryBtn;
 	private RadioButton mCartBtn;
 	private RadioButton mUcenterBtn;
+	private Button mScanBtn;
 	private Fragment mFragment;
 	private FragmentManager mFragmentManager;
 	private int mFragmentId;
@@ -52,13 +56,12 @@ public class HomeActivity extends FragmentActivity{
 		mCategoryBtn.setOnClickListener(listener);
 		mCartBtn.setOnClickListener(listener);
 		mUcenterBtn.setOnClickListener(listener);
-
 	}
 	
 
 
 	class HomeRadioButtonClickListener implements View.OnClickListener{
-		
+		FragmentTransaction transaction = mFragmentManager.beginTransaction();
 		@Override
 		public void onClick(View v) {
 			RadioButton btn = (RadioButton) v;

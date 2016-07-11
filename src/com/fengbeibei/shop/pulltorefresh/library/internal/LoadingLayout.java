@@ -181,13 +181,13 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	}
 
 	public final void setHeight(int height) {
-		ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) getLayoutParams();
+		ViewGroup.LayoutParams lp = getLayoutParams();
 		lp.height = height;
 		requestLayout();
 	}
 
 	public final void setWidth(int width) {
-		ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) getLayoutParams();
+		ViewGroup.LayoutParams lp = getLayoutParams();
 		lp.width = width;
 		requestLayout();
 	}
@@ -285,6 +285,7 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		setSubHeaderText(label);
 	}
 
+	@Override
 	public final void setLoadingDrawable(Drawable imageDrawable) {
 		// Set Drawable
 		mHeaderImage.setImageDrawable(imageDrawable);
@@ -294,14 +295,17 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 		onLoadingDrawableSet(imageDrawable);
 	}
 
+	@Override
 	public void setPullLabel(CharSequence pullLabel) {
 		mPullLabel = pullLabel;
 	}
 
+	@Override
 	public void setRefreshingLabel(CharSequence refreshingLabel) {
 		mRefreshingLabel = refreshingLabel;
 	}
 
+	@Override
 	public void setReleaseLabel(CharSequence releaseLabel) {
 		mReleaseLabel = releaseLabel;
 	}

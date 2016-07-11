@@ -12,5 +12,6 @@
 	    android:horizontalSpacing="5dp"
 	    android:numColumns="2"
 	    android:listSelector="@null"
-	    android:background="@null"/>
+	    android:background="@null"
+	    android:layout_marginBottom="5dp"/>
 </LinearLayout>

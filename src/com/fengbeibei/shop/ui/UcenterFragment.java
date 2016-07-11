@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.LoginActivity;
+import com.fengbeibei.shop.activity.OrderListActivity;
 import com.fengbeibei.shop.bean.User;
 import com.fengbeibei.shop.common.CircleImageDrawable;
 import com.fengbeibei.shop.common.Constants;
@@ -13,7 +14,10 @@ import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.MyApplication;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -22,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +44,8 @@ public class UcenterFragment extends Fragment{
 	private TextView mAccountBalance;
 	private TextView mPoint;
 	private TextView mVoucher;
+	private TextView mSeeAllOrder;
+	private static final  String REQUEST_CODE = "0011";
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -47,14 +54,19 @@ public class UcenterFragment extends Fragment{
 		 mApplication = MyApplication.getInstance();
 		 initView(ucenterLayout);
 		 String key = mApplication.getLoginKey();
-		 Boolean isLogin = mApplication.isLogin();
-		if(key != null && !"".equals(key) && !isLogin){
-			load(key);
-			initData();
-		} else if(isLogin){
+		if(key != null && !"".equals(key)){
 			initData();
 		}
+		mSeeAllOrder.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(getActivity(),OrderListActivity.class);
+				startActivity(intent);
+			}
+			
+		});
 		return ucenterLayout;
 	}
 	
@@ -72,20 +84,15 @@ public class UcenterFragment extends Fragment{
 		mAccountBalance = (TextView) v.findViewById(R.id.account_balance);
 		mPoint = (TextView) v.findViewById(R.id.point);
 		mVoucher = (TextView) v.findViewById(R.id.voucher);
-
+		mSeeAllOrder = (TextView) v.findViewById(R.id.seeAllOrder);
 	}
 	
 	public void initData(){
-		mUser = mApplication.getUserInfo();
-		mUsername.setText(mUser.getUserName());
-		mWaitPayCount.setText(mUser.getOrderNopayCount());
-		mWaitShipCount.setText(mUser.getOrderNoshipCount());
-		mWaitReceiptCount.setText(mUser.getOrderNoreceiptCount());
-		mWaitCommentCount.setText(mUser.getOrderNocommentCount());
-		Log.d("d", mUser.getUserName());
+		load();
+
 	}
-	public void load(String key){
-		
+	public void load(){
+		String key = mApplication.getLoginKey();
 		String url = Constants.MEMBER_INFO_URL + "&key="+key;
 		HttpClientHelper.asynGet(url,new CallBack(){
 
@@ -94,10 +101,16 @@ public class UcenterFragment extends Fragment{
 				// TODO Auto-generated method stub
 				if (response.what == HttpStatus.SC_OK){
 					String json = (String)response.obj;
-					Log.d("post",json);
 					mUser = User.newInstance(json);
+			
 					if (mUser != null){
+						System.out.println("load"+json);
 						MyApplication.getInstance().setUserInfo(mUser);
+						mUsername.setText(mUser.getUserName());
+						mWaitPayCount.setText(mUser.getOrderNopayCount());
+						mWaitShipCount.setText(mUser.getOrderNoshipCount());
+						mWaitReceiptCount.setText(mUser.getOrderNoreceiptCount());
+						mWaitCommentCount.setText(mUser.getOrderNocommentCount());
 					}
 				}
 			}
@@ -114,16 +127,54 @@ public class UcenterFragment extends Fragment{
 	
 
 	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		registerBroadcastReceiver();
+	}
+
+	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if(mApplication.isLogin()){
-			mUser = mApplication.getUserInfo();
+		Log.d("ucenterFragment", "onResume");
+		String key = mApplication.getLoginKey();
+		if(key != null && !"".equals(key)){
 			initData();
 		}
 		
 	}
-	
-	
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		Log.d("ucenterFragment", "onPause");
+		super.onPause();
+	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		getActivity().unregisterReceiver(mBroadcastReceiver);
+	}
+
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String action = intent.getAction();
+			Log.d("receiver", action);
+			if(action == REQUEST_CODE){
+				initData();
+			}
+		}
+		
+	};
+	public void registerBroadcastReceiver(){
+		IntentFilter myIntentFilter = new IntentFilter();
+		myIntentFilter.addAction(REQUEST_CODE);
+		getActivity().registerReceiver(mBroadcastReceiver, myIntentFilter);
+	}
 }

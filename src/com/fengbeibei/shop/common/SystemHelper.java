@@ -8,7 +8,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class SystemHelper {
 	/**
-	 * DisplayImageOptionsÊÇÓÃÓÚÉèÖÃÍ¼Æ¬ÏÔÊ¾µÄÀà
+	 * DisplayImageOptionsæ˜¯ç”¨äºè®¾ç½®å›¾ç‰‡æ˜¾ç¤ºçš„ç±»
 	 */
 	public static DisplayImageOptions getDisplayImageOptions() {
 		DisplayImageOptions options =  new DisplayImageOptions.Builder()
@@ -16,11 +16,11 @@ public class SystemHelper {
 		.showImageOnFail(0)
 		.resetViewBeforeLoading(true)
 		.cacheOnDisk(true)
-		.cacheInMemory(true)						// ÉèÖÃÏÂÔØµÄÍ¼Æ¬ÊÇ·ñ»º´æÔÚÄÚ´æÖĞ
+		.cacheInMemory(true)						// è®¾ç½®ä¸‹è½½çš„å›¾ç‰‡æ˜¯å¦ç¼“å­˜åœ¨å†…å­˜ä¸­
 		.imageScaleType(ImageScaleType.EXACTLY)
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.considerExifParams(true)
-		.displayer(new FadeInBitmapDisplayer(000))//Í¼Æ¬ÏÔÊ¾Ê±¼ä
+		.displayer(new FadeInBitmapDisplayer(000))//å›¾ç‰‡æ˜¾ç¤ºæ—¶é—´
 		.build();
 		
 		return options;	

@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,9 +43,7 @@ public class CategoryFragment extends Fragment{
 		View categoryLayout = inflater.inflate(R.layout.category,container, false);
 		 mParentCategoryLayout = (ListView)categoryLayout.findViewById(R.id.parentCategory);
 		mChildCategoryLayout = (LinearLayout) categoryLayout.findViewById(R.id.childCategory);
-		
 		initParentCategory();
-
 		getChildCategory("1");
 		return categoryLayout;
 	}
@@ -60,10 +59,12 @@ public class CategoryFragment extends Fragment{
 					String json = (String) response.obj;
 					try{
 						JSONObject obj = new JSONObject(json);
-						String categoryJson= (String)obj.getString("class_list");
+						String categoryJson= obj.getString("class_list");
 						ArrayList<Category> parentCategory = Category.newIntance(categoryJson);
 						mCategoryAdapter = new CategoryAdapter(CategoryFragment.this.getContext());
+						mCategoryAdapter.setSelectedPosition(0);
 						mCategoryAdapter.setCategoryData(parentCategory);
+						
 						mParentCategoryLayout.setAdapter(mCategoryAdapter);
 						mParentCategoryLayout.setOnItemClickListener(new OnItemClickListener(){
 
@@ -71,14 +72,17 @@ public class CategoryFragment extends Fragment{
 							public void onItemClick(AdapterView<?> arg0,
 									View arg1, int arg2, long arg3) {
 								// TODO Auto-generated method stub
-								arg1.setSelected(true);
+								int itemPosition = mCategoryAdapter.getSelectedPosition();
 								Category category =(Category) mParentCategoryLayout.getItemAtPosition(arg2);
-								if(category != null){
+								mCategoryAdapter.setSelectedPosition(arg2);
+						     //  mCategoryAdapter.notifyDataSetInvalidated();
+								if(category != null && !(itemPosition == arg2) ){
 									getChildCategory(category.getGcId());
 								}
 							}
 							
 						});
+				
 					} catch(JSONException e){
 						e.printStackTrace();
 					}
@@ -121,7 +125,7 @@ public class CategoryFragment extends Fragment{
 							
 						
 								if(!cateJsonObj .isNull("child")){
-										String childJson = (String )cateJsonObj.optString("child");
+										String childJson = cateJsonObj.optString("child");
 										MyGridView categoryGridView = (MyGridView)childCategoryView.findViewById(R.id.categoryGridView);
 										ArrayList<Category> childCategoryData = Category.newIntance(childJson);
 										CategoryGridViewAdapter  categoryGridViewAdapter = new CategoryGridViewAdapter(CategoryFragment.this.getContext(),R.layout.child_category_grid,childCategoryData);

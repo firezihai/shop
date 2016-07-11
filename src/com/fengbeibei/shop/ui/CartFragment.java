@@ -11,26 +11,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class CartFragment extends Fragment{
-
+	private MyApplication mApplication;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View cartLayout = inflater.inflate(R.layout.cart, container, false);
+		 mApplication = MyApplication.getInstance();
 		return cartLayout;
 	}
 	
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		
-	}
+
 
 	public void initData(){
 		HttpClientHelper.asynGet(Constants.CART_LIST_URL, new CallBack(){
@@ -50,5 +47,15 @@ public class CartFragment extends Fragment{
 		});
 	}
 	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		Log.d("ucenterFragment", "onResume");
+		if(mApplication.isLogin()){
 
+			initData();
+		}
+		
+	}
 }

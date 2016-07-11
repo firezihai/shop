@@ -25,10 +25,10 @@ public class AnimateFirstDisplayListener implements ImageLoadingListener  {
 		// TODO Auto-generated method stub
 		if (loadedImage != null) {
 			ImageView imageView = (ImageView) arg1;
-			// ÊÇ·ñµÚÒ»´ÎÏÔÊ¾
+			// æ˜¯å¦ç¬¬ä¸€æ¬¡æ˜¾ç¤º
 			boolean firstDisplay = !displayedImages.contains(imageUri);
 			if (firstDisplay) {
-				// Í¼Æ¬µ­ÈëĞ§¹û
+				// å›¾ç‰‡æ·¡å…¥æ•ˆæœ
 				FadeInBitmapDisplayer.animate(imageView, 500);
 				displayedImages.add(imageUri);
 			}

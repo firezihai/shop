@@ -25,29 +25,39 @@ import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnPullEventListener;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.State;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyScrollView;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.ScrollViewListener;
 import com.fengbeibei.shop.widget.MyGridView;
+import com.fengbeibei.shop.zxing.activity.CaptureActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnScrollChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,18 +67,18 @@ import android.widget.TextView;
 
 public class HomeFragment extends Fragment{
 	private PullToRefreshScrollView mPullToRefresh;
-	/*÷˜≤ºæ÷*/
+	/*‰∏ªÂ∏ÉÂ±Ä*/
 	private View homeLayout;
-	private ScrollView mScrollView;
+	private MyScrollView mScrollView;
 	
 	/**
-	 * º«¬º∞¥œ¬ ±µƒŒª÷√
+	 * ËÆ∞ÂΩïÊåâ‰∏ãÊó∂ÁöÑ‰ΩçÁΩÆ
 	 */
 	private float downLocation;
 	private LinearLayout mHomeHead;
 	private Button mScanBtn;
 	private Button mMessageBtn;
-	/*¬÷≤•π„∏Ê*/
+	/*ËΩÆÊí≠ÂπøÂëä*/
 	private ViewPager mAdViewPager;
 	private ArrayList<ImageView> mAdData = new ArrayList<ImageView>();
 	private LinearLayout mAdPoint;
@@ -76,13 +86,14 @@ public class HomeFragment extends Fragment{
 	private  final int SHOW_NEXT = 0011;
 	private boolean mShowNext = true;
 	private int mCurrentIndex = 0;
-	/*≤Àµ•*/
+	/*ËèúÂçï*/
 	private Button mMenuCategoryBtn;
 	private Button mMenuUcenterBtn;
 	private Button mMenuOrderBtn;
 	private Button mMenuCollectBtn;
 	private LinearLayout mHomeData;
 	
+	private int curpage = 1;
 	/*ImageLoader*/
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options = SystemHelper.getDisplayImageOptions(); 
@@ -97,8 +108,12 @@ public class HomeFragment extends Fragment{
 		mHomeHead.bringToFront();
 		mPullToRefresh = (PullToRefreshScrollView)homeLayout.findViewById(R.id.homePullToRefresh);
 		mPullToRefresh.setMode(Mode.BOTH);
+		mPullToRefresh.getLoadingLayoutProxy(true,false).setPullLabel("‰∏ãÊãâÂà∑Êñ∞");
+		mPullToRefresh.getLoadingLayoutProxy(false,true).setPullLabel("‰∏äÊãâÂà∑Êñ∞");
+		mPullToRefresh.getLoadingLayoutProxy().setRefreshingLabel("Ê≠£Âú®Âà∑Êñ∞"); 
+		mPullToRefresh.getLoadingLayoutProxy().setReleaseLabel("ÈáäÊîæÁ´ãÂç≥Âà∑Êñ∞");  
 		mPullToRefresh.setOnRefreshListener(new OnRefreshListener2<ScrollView>(){
-
+			
 			@Override
 			public void onPullDownToRefresh(
 					PullToRefreshBase<ScrollView> refreshView) {
@@ -111,15 +126,53 @@ public class HomeFragment extends Fragment{
 			public void onPullUpToRefresh(
 					PullToRefreshBase<ScrollView> refreshView) {
 				// TODO Auto-generated method stub
-				
+				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(),  
+                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL); 
+				refreshView.getLoadingLayoutProxy(false,true).setLastUpdatedLabel("ÊúÄÂêéÊõ¥Êñ∞Ôºö"+label);  
+				curpage++;
 				initGoodsList();
 			}
 			
 			
 		});
-		imageLoader.init(ImageLoaderConfiguration.createDefault(HomeFragment.this.getActivity()));
-		mScrollView =mPullToRefresh.getRefreshableView();
+		mScrollView =(MyScrollView)mPullToRefresh.getRefreshableView();
+	   mScrollView.setScrollViewListener(new ScrollViewListener(){
+
+			@Override
+			public void onScrollChanged(ScrollView scrollView,
+					int x, int y, int oldx, int oldy) {
+				// TODO Auto-generated method stub
+				
+				int homeHeadH = mHomeHead.getMeasuredHeight();
+				float  baseRatio= (float) 255 /homeHeadH;
+				float ratio = (float) Math.ceil(baseRatio);
+				int transparent = (int)Math.ceil( ratio * y);
+				String transparentHex  =Integer.toHexString( transparent );
+				if( transparentHex.length() ==1){
+					transparentHex = "0"+ transparentHex;
+				}
+				if(transparent<=255){
+					mHomeHead.setBackgroundColor(Color.parseColor("#"+ transparentHex+"11cd6e"));
+				}else{
+					mHomeHead.setBackgroundColor(Color.parseColor("#FF11cd6e"));
+				}
+			}
+			
+		});
+	//	mScrollView.setOnScrollChangeListener(l);
 		initView(homeLayout);
+		mScanBtn = (Button) homeLayout .findViewById(R.id.scanBtn);
+		mScanBtn.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new  Intent(getActivity(),CaptureActivity.class);
+				startActivity(intent);
+			}
+			
+		});
+		
 		initData();
 		return homeLayout;
 	}
@@ -140,6 +193,7 @@ public class HomeFragment extends Fragment{
 							
 						} else if (type.equals("url")){
 							Intent intent  = new Intent(getActivity(),SubjectWebActivity.class);
+							intent.putExtra("data", data);
 							startActivity(intent);
 						} else if (type.equals("goods")){
 							Intent intent  = new Intent(getActivity(),GoodsDetailActivity.class);
@@ -153,7 +207,7 @@ public class HomeFragment extends Fragment{
 		});;
 	}
 	/**
-	 * ≥ı ºªØÀ˘”–øÿº˛
+	 * ÂàùÂßãÂåñÊâÄÊúâÊéß‰ª∂
 	 * @param homeLayout
 	 */
 	public void initView(View homeLayout){
@@ -167,7 +221,7 @@ public class HomeFragment extends Fragment{
 			@Override
 			public void onFinish(Message response) {
 				// TODO Auto-generated method stub
-				mPullToRefresh.onRefreshComplete();//º”‘ÿÕÍ≥…œ¬¿≠øÿº˛»°œ˚œ‘ æ
+				mPullToRefresh.onRefreshComplete();//Âä†ËΩΩÂÆåÊàê‰∏ãÊãâÊéß‰ª∂ÂèñÊ∂àÊòæÁ§∫
 				mHomeHead.setVisibility(View.VISIBLE);
 				if(response.what == HttpStatus.SC_OK){
 					
@@ -211,13 +265,13 @@ public class HomeFragment extends Fragment{
 		});
 	}
 	public void initGoodsList(){
-		
-		HttpClientHelper.asynGet(Constants.HOME_GOODS_URL, new CallBack(){
+		String url = Constants.HOME_GOODS_URL+"&curpage="+curpage;
+		HttpClientHelper.asynGet(url, new CallBack(){
 
 			@Override
 			public void onFinish(Message response) {
-				mPullToRefresh.onRefreshComplete();//º”‘ÿÕÍ≥…œ¬¿≠øÿº˛»°œ˚œ‘ æ
-
+			//	mPullToRefresh.onRefreshComplete();//Âä†ËΩΩÂÆåÊàê‰∏ãÊãâÊéß‰ª∂ÂèñÊ∂àÊòæÁ§∫
+				mPullToRefresh.onRefreshComplete();
 				// TODO Auto-generated method stub
 				if (response.what == HttpStatus.SC_OK){
 					String json = (String)response.obj;
@@ -225,10 +279,10 @@ public class HomeFragment extends Fragment{
 						JSONObject obj = new JSONObject(json);
 						String goodsListJson = obj.getString("list");
 						ArrayList<HomeGoodsList> goodsList = HomeGoodsList.newInstance(goodsListJson);
-						View homGoodsView = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list, null);
-						MyGridView goodsGridView = (MyGridView) homGoodsView.findViewById(R.id.homeGoodsListGridView);
 						HomeGoodsListGridViewAdapter goodsGridViewAdapter = new HomeGoodsListGridViewAdapter(HomeFragment.this.getContext());
-						goodsGridViewAdapter.setHomeGoodsData(goodsList);
+						View homGoodsView  = getActivity().getLayoutInflater().inflate(R.layout.home_goods_list, null, false);
+						MyGridView goodsGridView = (MyGridView) homGoodsView.findViewById(R.id.homeGoodsListGridView);
+					    goodsGridViewAdapter.setHomeGoodsData(goodsList);
 						goodsGridView.setAdapter(goodsGridViewAdapter);
 						mHomeData.addView(homGoodsView);
 					} catch (JSONException e){
@@ -253,9 +307,13 @@ public class HomeFragment extends Fragment{
 		ImageView imageView1 = (ImageView) home2View.findViewById(R.id.home2Image1);
 		ImageView imageView2 = (ImageView) home2View.findViewById(R.id.home2Image2);
 		ImageView imageView3 = (ImageView) home2View.findViewById(R.id.home2Image3);
+
 		imageLoader.displayImage(home2Data.getSquareImage(), imageView1, options, animateFirstListener);
 		imageLoader.displayImage(home2Data.getRectangle1Image(), imageView2, options, animateFirstListener);
 		imageLoader.displayImage(home2Data.getRectangle2Image(), imageView3, options, animateFirstListener);
+		OnViewClick(imageView1,home2Data.getSquareType(),home2Data.getSquareData());
+		OnViewClick(imageView2,home2Data.getRectangle1Type(),home2Data.getRectangle1Data());
+		OnViewClick(imageView2,home2Data.getRectangle2Type(),home2Data.getRectangle2Data());
 		if(!home2Data.getTitle().equals("") && !home2Data.getTitle().equals("null") && home2Data.getTitle() != null){
 			home2Title.setVisibility(View.VISIBLE);
 			home2Title.setText(home2Data.getTitle());
@@ -316,8 +374,8 @@ public class HomeFragment extends Fragment{
 		
 	}
 	/**
-	 * ∂•≤øπ„∏Ê
-	 * @param adList  π„∏Ê–≈œ¢ ˝◊È
+	 * È°∂ÈÉ®ÂπøÂëä
+	 * @param adList  ÂπøÂëä‰ø°ÊÅØÊï∞ÁªÑ
 	 */
 	public void initHeadAd(String json){
 		ArrayList<AdList> adList = null;
@@ -338,14 +396,14 @@ public class HomeFragment extends Fragment{
 			mAdPointData.clear();
 			for(int i =0 ; i<adList.size() ; i++){
 				AdList ad = adList.get(i);
-				ImageView imageView = new ImageView(HomeFragment.this.getActivity());
+				ImageView imageView = new ImageView(getActivity());
 				imageView.setScaleType(ScaleType.FIT_XY);
 				imageView.setImageResource(R.drawable.dic_av_item_pic_bg);
-				imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+				imageView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 				imageLoader.displayImage(ad.getImage(), imageView, options,animateFirstListener);
 				mAdData.add(imageView);
-				ImageView imageViewPoint = new ImageView(HomeFragment.this.getActivity());
-				LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,1);
+				ImageView imageViewPoint = new ImageView(getActivity());
+				LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT,1);
 				imageViewPoint.setLayoutParams(pointParams);
 				imageViewPoint.setImageResource(R.drawable.home_point);
 				
@@ -401,7 +459,7 @@ public class HomeFragment extends Fragment{
 		}
 	};
 	/**
-	 * œ¬“ª’≈Õº∆¨
+	 * ‰∏ã‰∏ÄÂº†ÂõæÁâá
 	 */
 	private void showNext(){
 		mCurrentIndex++;
@@ -416,7 +474,7 @@ public class HomeFragment extends Fragment{
 		mAdViewPager.setCurrentItem(mCurrentIndex);
 	}
 	/**
-	 * …œ“ª’≈Õº∆¨
+	 * ‰∏ä‰∏ÄÂº†ÂõæÁâá
 	 */
 	private void showPrev(){
 		mCurrentIndex--;
@@ -431,18 +489,53 @@ public class HomeFragment extends Fragment{
 		mAdViewPager.setCurrentItem(mCurrentIndex);
 	}
 	/**
-	 * º§ªÓ“——°÷–Õº∆¨∂‘”¶µ„
+	 * ÊøÄÊ¥ªÂ∑≤ÈÄâ‰∏≠ÂõæÁâáÂØπÂ∫îÁÇπ
 	 */
 	private void selectPoint(int index){
 		ImageView img = mAdPointData.get(index);
 		img.setSelected(true);
 	}
 	/**
-	 * Ω˚”√Œ¥—°÷–Õº∆¨∂‘”¶µ„
+	 * Á¶ÅÁî®Êú™ÈÄâ‰∏≠ÂõæÁâáÂØπÂ∫îÁÇπ
 	 * @param index
 	 */
 	private void unSelectPoint(int index){
 		ImageView img = mAdPointData.get(index);
 		img.setSelected(false);
 	}
+
+	/*private class RegOnTouchListener implements View.OnTouchListener{
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			// TODO Auto-generated method stub
+			switch(event.getAction()){
+			case MotionEvent.ACTION_DOWN:
+				
+				break;
+			case MotionEvent.ACTION_MOVE:
+				int scrollY = mScrollView.getScrollY();
+				int homeHeadH = mHomeHead.getMeasuredHeight();
+				float base =(float) 255 /homeHeadH;
+				int ratio =(int) Math.ceil(base*1000 ) ;
+			
+				if(scrollY >=0  && scrollY <= homeHeadH){
+					float transparentInt =  ratio*scrollY / 1000;
+					int transparent = (int)Math.ceil( transparentInt);
+					String transparentHex  =Integer.toHexString( transparent );
+					if( transparentHex.length() ==1){
+						transparentHex = "0"+ transparentHex;
+					}
+					System.out.println("#"+ transparentHex+"11cd6e"+"== ratio="+ ratio+"homeHeadH="+homeHeadH+"base"+base);
+					mHomeHead.setBackgroundColor(Color.parseColor("#"+ transparentHex+"11cd6e"));
+				}
+				break;
+			 default:
+			        break;
+			}
+			return false;
+		}
+		
+	}*/
+	
 }

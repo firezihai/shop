@@ -1,7 +1,5 @@
 package com.fengbeibei.shop.common;
 
-import android.os.Environment;
-
 public final class Constants {
 	
 	/**
@@ -9,60 +7,65 @@ public final class Constants {
 	 */
 	public final static String APP_CODE = "shop.fengbeibei.com";
 	/**
-	 * Óë·şÎñÆ÷¶ËÁ¬½ÓĞ­Òå
+	 * ä¸æœåŠ¡å™¨ç«¯è¿æ¥åä¹‰
 	 */
 	public final static String PROTOCOL = "http://";
 	/** 
-	 *·şÎñÆ÷ÓòÃû
+	 *æœåŠ¡å™¨åŸŸå
 	 */
 	public final static String HOST = "www.fengbeibei.com";
 	
 	/**
-	 * ·şÎñÆ÷¶Ë¿Ú
+	 * æœåŠ¡å™¨ç«¯å£
 	 */
 	public final static String PORT = ":80";
 	
 	/**
-	 * ·şÎñÆ÷¶ËÓ¦ÓÃÃû³Æ
+	 * æœåŠ¡å™¨ç«¯åº”ç”¨åç§°
 	 */
 	public final static String APP = "/mobile";
 	/**
-	 * ·ÖÒ³Êı
+	 * åˆ†é¡µæ•°
 	 */
 	public final static String PAGESIZE = "20";
 	/**
-	 * ·şÎñÆ÷¶ËÇëÇóÈë¿Ú
+	 * æœåŠ¡å™¨ç«¯è¯·æ±‚å…¥å£
 	 */
 	public final static String APP_URL = PROTOCOL + HOST  + APP + "/index.php?";
 	
 	/**
-	 * Ê×Ò³ÇëÇóÄÚÈİÇëÇó½Ó¿Ú
+	 * é¦–é¡µè¯·æ±‚å†…å®¹è¯·æ±‚æ¥å£
 	 */
 	public final static String HOME_URL = APP_URL + "act=index&op=index";
 	
 	/**
-	 * Ê×Ò³ÉÌÆ·ÁĞ±íÇëÇó½Ó¿Ú
+	 * é¦–é¡µå•†å“åˆ—è¡¨è¯·æ±‚æ¥å£
 	 */
 	 public final static String HOME_GOODS_URL = APP_URL + "act=index&op=pull_load";
 	 /**
-	  * ¶¥¼¶ÉÌÆ··ÖÀàÇëÇó½ÓÆ·
+	  * é¡¶çº§å•†å“åˆ†ç±»è¯·æ±‚æ¥å“
 	  */
 	 public final static String PARENT_CATEGORY_URL = APP_URL+"act=goods_class";
 	 /**
-	  * ×Ó·ÖÀàÉÌÆ·ÇëÇó½Ó¿Ú
+	  * å­åˆ†ç±»å•†å“è¯·æ±‚æ¥å£
 	  */
 	 public final static String CHILD_CATEGORY_URL = APP_URL+"act=goods_class&op=get_child_list";
 	 /**
-	  * ¹ºÎï³µÉÌÆ·½Ó¿Ú
+	  * è´­ç‰©è½¦å•†å“æ¥å£
 	  */
 	 public final static String CART_LIST_URL = APP_URL+"act=cart&op=cart_list";
 	 
 	 /**
-	  * »áÔ±µÇÂ½½Ó¿Ú
+	  * ä¼šå‘˜ç™»é™†æ¥å£
 	  */
 	 public final static String LOGIN_URL = APP_URL + "act=login&op=index";
 	 /**
-	  * »áÔ±ĞÅÏ¢½Ó¿Ú
+	  * ä¼šå‘˜ä¿¡æ¯æ¥å£
 	  */
 	 public final static String MEMBER_INFO_URL = APP_URL +"act=member_index&op=index";
+	 
+	 /**
+	  * 
+	  */
+	 public static final String ORDER_LIST_URL = APP_URL + "act=member_order&op=order_list";
 }

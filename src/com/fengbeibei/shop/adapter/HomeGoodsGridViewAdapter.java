@@ -26,7 +26,7 @@ public class HomeGoodsGridViewAdapter extends BaseAdapter{
 	private ImageLoader mImageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
 	private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
-	/*¿Ø¼ş¼¯ºÏ*/
+	/*æ§ä»¶é›†åˆ*/
 	static class ViewHolder{
 		TextView goodsName;
 		TextView goodsPrice;

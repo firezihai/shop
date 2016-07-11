@@ -29,7 +29,7 @@ public class HomeGoodsListGridViewAdapter extends BaseAdapter{
 	private DisplayImageOptions mOptions = SystemHelper.getDisplayImageOptions();
 	private ImageLoadingListener mAnimateFirstListener = new AnimateFirstDisplayListener();
 	/**
-	 * ¿Ø¼ş¼¯ºÏ
+	 * æ§ä»¶é›†åˆ
 	 * @author zihaidetiandi@sina.com
 	 *
 	 */

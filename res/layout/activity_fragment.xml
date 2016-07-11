@@ -19,7 +19,8 @@
 	       android:background="@color/grey"/>
 		<RadioGroup
 		    android:layout_width="match_parent"
-		    android:layout_height="50dp"
+		    android:layout_height="48dp"
+		    android:weightSum="4"
 		    android:background="@color/lightgrey"
 		    android:orientation="horizontal">
 		   <RadioButton

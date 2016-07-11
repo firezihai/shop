@@ -3,6 +3,7 @@ package com.fengbeibei.shop.common;
 import java.io.File;
 import java.util.Properties;
 
+import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.User;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -11,12 +12,24 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MyApplication extends Application{
 	private static Context mContext;
 	private static MyApplication mIntance;
-	private static boolean mIsLogin = false;
+	private static boolean mIsLogin = true;
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -31,7 +44,7 @@ public class MyApplication extends Application{
 		return mContext;
 	}
 	/**
-	 * µÇÂ½×´Ì¬
+	 * ç™»é™†çŠ¶æ€
 	 * @return
 	 */
 	public boolean isLogin(){
@@ -39,19 +52,21 @@ public class MyApplication extends Application{
 		String isLogin = getProperty("user.login_state");
 		if(key != null && !"".equals(key) && isLogin != null &&  isLogin.equals("1")){
 			mIsLogin = true;
+		}else{
+			mIsLogin = false;
 		}
 		return mIsLogin;
 		
 	}
 	/**
-	 * »ñÈ¡µÇÂ½key
+	 * è·å–ç™»é™†key
 	 * @return
 	 */
 	public String getLoginKey(){
 		return AppConfig.intance(this).get("user.key");
 	}
 	/**
-	 * ¼ÓÔØ»áÔ±ĞÅÏ¢
+	 * åŠ è½½ä¼šå‘˜ä¿¡æ¯
 	 */
 	public User getUserInfo(){
 		User user = new User();
@@ -94,7 +109,7 @@ public class MyApplication extends Application{
 	 * 
 	 */
 	/**
-	 * ½«µÇÂ½keyĞ´ÈëÅäÖÃĞÅÏ¢
+	 * å°†ç™»é™†keyå†™å…¥é…ç½®ä¿¡æ¯
 	 * @param key
 	 * @param value
 	 */
@@ -103,14 +118,14 @@ public class MyApplication extends Application{
 		setProperty(key,value);
 	}
 	/**
-	 * ±£´æÒ»¸öpropeties¶ÔÏó
+	 * ä¿å­˜ä¸€ä¸ªpropetieså¯¹è±¡
 	 * @param properties
 	 */
 	public void setProperties(Properties properties){
 		AppConfig.intance(mContext).set(properties);
 	}
 	/**
-	 * ÏòpropertiesÎÄ¼şĞ´Èë¼üÖµ¶ÔÅäÖÃ
+	 * å‘propertiesæ–‡ä»¶å†™å…¥é”®å€¼å¯¹é…ç½®
 	 * @param key
 	 * @param value
 	 */
@@ -118,13 +133,14 @@ public class MyApplication extends Application{
 		AppConfig.intance(this).set(key, value);
 	}
 	/**
-	 * ¶ÁÈ¡propertiesÎÄ¼şÖĞ¶ÔÓ¦¼üµÄÖµ
+	 * è¯»å–propertiesæ–‡ä»¶ä¸­å¯¹åº”é”®çš„å€¼
 	 * @param key
 	 * @return 
 	 */
 	public String getProperty(String key){
 		return AppConfig.intance(this).get(key);
 	}
+	
 	public void initImageLoader(Context context){
 		File cacheDir = new File(AppConfig.CACHE_DIR_IMAGE);
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
@@ -137,5 +153,34 @@ public class MyApplication extends Application{
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
+	}
+	
+	public static void showToast(String message){
+		if (message != null  && !message.equalsIgnoreCase("")){
+			View view = LayoutInflater.from(mContext).inflate(R.layout.view_toast,null);
+			((TextView) view.findViewById(R.id.toastMessage)).setText(message);
+			Toast toast = new Toast(mContext);
+			toast.setView(view);
+			toast.setGravity(Gravity.CENTER,0, 0);
+			toast.setDuration(Toast.LENGTH_LONG);
+			toast.show();
+		}
+	}
+	
+	public static Dialog createLoadingDialog(Context context,String msg){
+		LayoutInflater inflater = LayoutInflater.from(context);
+		View v = inflater.inflate(R.layout.view_toast, null);
+		LinearLayout linearLayout = (LinearLayout) v.findViewById(R.id.dialog_view);
+		ImageView imageView = (ImageView) v.findViewById(R.id.toastIcon);
+	   TextView textMsg = (TextView) v.findViewById(R.id.toastMessage);
+		Animation loadingAnimation = AnimationUtils.loadAnimation(mContext, R.anim.loading_animation);
+		imageView.startAnimation(loadingAnimation);
+		textMsg.setText(msg);
+		imageView.setImageResource(R.drawable.loading_circle);
+		imageView.setVisibility(View.VISIBLE);
+		Dialog loadingDialog = new Dialog(context,R.style.loadingDialog);
+		loadingDialog.setCancelable(false);
+		loadingDialog.setContentView(linearLayout, new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+		return loadingDialog;
 	}
 }

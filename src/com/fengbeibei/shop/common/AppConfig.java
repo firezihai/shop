@@ -10,16 +10,16 @@ import android.os.Environment;
 
 public class AppConfig {
 	private final static String APP_CONFIG = "config";
-	/** Í¼Æ¬»º´æÄ¿Â¼  */
+	/** å›¾ç‰‡ç¼“å­˜ç›®å½•  */
 	public static final String CACHE_DIR_IMAGE;
-	/** ±¾µØ»º´æÄ¿Â¼  */
+	/** æœ¬åœ°ç¼“å­˜ç›®å½•  */
 	public static final String CACHE_DIR;
 	/**
-	 * ÉÏÏÂÎÄ¶ÔÏó
+	 * ä¸Šä¸‹æ–‡å¯¹è±¡
 	 */
 	private Context mContext;
 	/**
-	 * AppConfigÊµÀı
+	 * AppConfigå®ä¾‹
 	 */
 	private static AppConfig appConfig;
 	static {
@@ -28,10 +28,11 @@ public class AppConfig {
 		}else{
 			CACHE_DIR = Environment.getRootDirectory().getAbsolutePath() + "/fengbeibei/";
 		}
+		// mnt/sdcard/fengbeibei/image
 		CACHE_DIR_IMAGE = CACHE_DIR + "/image";
 	}
 	/**
-	 * Appconfigµ¥Àı·½·¨
+	 * Appconfigå•ä¾‹æ–¹æ³•
 	 * @param context
 	 * @return
 	 */
@@ -44,7 +45,7 @@ public class AppConfig {
 		return appConfig;
 	}
 	/**
-	 * ¼ÓÔØÒ»¸öProperties¶ÔÏó
+	 * åŠ è½½ä¸€ä¸ªPropertieså¯¹è±¡
 	 * @return 
 	 */
 	private Properties getProperties(){
@@ -67,7 +68,7 @@ public class AppConfig {
 		return properties;
 	}
 	/**
-	 * ±£´æÒ»¸öProperties¶ÔÏó
+	 * ä¿å­˜ä¸€ä¸ªPropertieså¯¹è±¡
 	 * @param p
 	 */
 	private void setProperties(Properties p){
@@ -88,7 +89,7 @@ public class AppConfig {
 		}
 	}
 	/**
-	 * ¸ù¾İkeyÔÚPropertiesÎÄ¼şÖĞ»ñÈ¡¶ÔÓ¦µÄÖµ
+	 * æ ¹æ®keyåœ¨Propertiesæ–‡ä»¶ä¸­è·å–å¯¹åº”çš„å€¼
 	 * @param key
 	 * @return
 	 */
@@ -97,7 +98,7 @@ public class AppConfig {
 		return (properties != null) ? properties.getProperty(key) : null;
 	}
 	/**
-	 * ÏòPropertiesÎÄ¼şÖĞĞ´ÈëÒ»¸ökey/valueµÄ¼üÖµ¶ÔÅäÖÃ
+	 * å‘Propertiesæ–‡ä»¶ä¸­å†™å…¥ä¸€ä¸ªkey/valueçš„é”®å€¼å¯¹é…ç½®
 	 * @param key
 	 * @param value
 	 */
@@ -116,7 +117,7 @@ public class AppConfig {
 		setProperties(properties);
 	}
 	/**
-	 * ¸ù¾İkey£¬´ÓPropertiesÒÆ³ıÒ»¸ö¼üÖµ¶ÔÅäÖÃ
+	 * æ ¹æ®keyï¼Œä»Propertiesç§»é™¤ä¸€ä¸ªé”®å€¼å¯¹é…ç½®
 	 * @param key
 	 */
 	public void remove(String... key){

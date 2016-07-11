@@ -14,6 +14,7 @@ import com.fengbeibei.shop.common.MyApplication;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +47,17 @@ public class LoginActivity extends Activity{
 		mAccountEdit = (EditText)findViewById(R.id.account_edit);
 		mPasswordEdit =(EditText)findViewById(R.id.password_edit);
 		mSubmitBtn = (Button)findViewById(R.id.submit_btn);
+		mSubmitBtn.setClickable(false);
 		mCancelLoginBtn = (Button) findViewById(R.id.cancel_login);
+		mCancelLoginBtn.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				LoginActivity.this.finish();
+			}
+			
+		});
 		mAccountEdit.addTextChangedListener(new TextWatcher(){
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -64,11 +75,13 @@ public class LoginActivity extends Activity{
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if(s.length() >= 6 && mPasswordStr.length() >= 6){
-					
-					changeButtonStyle(R.style.BtnEnabled);
+				if(s.length() >=2 && mPasswordStr.length() >= 6){
+					mSubmitBtn.setClickable(true);
+					changeButtonStyle();
 				}else{
-					changeButtonStyle(R.style.BtnDisable);
+					
+					mSubmitBtn.setClickable(false);
+					changeButtonStyle();
 				}
 				 mAccountStr= mAccountEdit.getText().toString();
 			}
@@ -79,11 +92,14 @@ public class LoginActivity extends Activity{
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if(s.length() >= 6 && mAccountStr.length() >= 6){
-					changeButtonStyle(R.style.BtnEnabled);
+				if(s.length() >= 6 && mAccountStr.length() >= 2){
+					mSubmitBtn.setClickable(true);
+					changeButtonStyle();
 				}else{
-					changeButtonStyle(R.style.BtnDisable);
+					mSubmitBtn.setClickable(false);
+					changeButtonStyle();
 				}
+				
 				mPasswordStr = mPasswordEdit.getText().toString();
 			}
 
@@ -102,11 +118,14 @@ public class LoginActivity extends Activity{
 			}
 			
 		});
-		
-		mSubmitBtn.setOnClickListener(new OnClickListener(){
 
+		mSubmitBtn.setOnClickListener(new OnClickListener(){
+			
 			@Override
 			public void onClick(View v) {
+				if(!mSubmitBtn.isClickable()){
+					return;
+				}
 				HashMap<String,String> params = new HashMap<String,String>();
 				params.put("username", mAccountStr);
 				params.put("password", mPasswordStr);
@@ -126,15 +145,13 @@ public class LoginActivity extends Activity{
 									Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
 									return;
 								}
-								Log.d("LoginActivity", json);
 								MyApplication.getInstance().setLoginKey("user.key", obj.getString("key"));
+								Intent mIntent = new Intent("0011"); 
+								sendBroadcast(mIntent);
 								LoginActivity.this.finish();
 							} catch (JSONException e){
 								e.printStackTrace();
 							}
-								
-							
-						//		LoginActivity.this.finish();
 						}
 					}
 
@@ -151,8 +168,8 @@ public class LoginActivity extends Activity{
 	}
 	
 	@TargetApi(23)
-	public void changeButtonStyle(int style){
-		if(R.style.BtnEnabled == style){
+	public void changeButtonStyle(){
+		if(mSubmitBtn.isClickable()){
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 				mSubmitBtn.setTextColor(getResources().getColor(R.color.white,null));
 			}else{
@@ -169,4 +186,5 @@ public class LoginActivity extends Activity{
 		}
 	}
 
+	
 }
