@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.fengbeibei.shop.pulltorefresh.library;
 
+import com.fengbeibei.shop.R;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build.VERSION;
@@ -47,13 +49,15 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 	}
 
 	@Override
-	protected ScrollView createRefreshableView(Context context, AttributeSet attrs) {
-		MyScrollView scrollView;
+	protected MyPullScrollView createRefreshableView(Context context, AttributeSet attrs) {
+		MyPullScrollView scrollView;
 		if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 			scrollView = new InternalScrollViewSDK9(context, attrs);
 		} else {
-			scrollView = new MyScrollView(context, attrs);
+			scrollView = new MyPullScrollView(context, attrs);
 		}
+
+		scrollView.setId(R.id.scrollview);
 		return scrollView;
 	}
 
@@ -72,10 +76,12 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 	}
 
 	@TargetApi(9)
-	 class InternalScrollViewSDK9 extends MyScrollView {  
+	final class InternalScrollViewSDK9 extends MyPullScrollView {
+
 		public InternalScrollViewSDK9(Context context, AttributeSet attrs) {
 			super(context, attrs);
-		} 
+		}
+
 		@Override
 		protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
 				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
@@ -101,33 +107,41 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 			}
 			return scrollRange;
 		}
-  
 	}
-	public class MyScrollView extends ScrollView{
+	public class MyPullScrollView extends ScrollView{
 		private ScrollViewListener scrollViewListener = null;  
-		
-		public MyScrollView(Context context, AttributeSet attrs) {
+		public MyPullScrollView(Context context, AttributeSet attrs) {
 			super(context, attrs);
 			// TODO Auto-generated constructor stub
 		}
 		public void setScrollViewListener(ScrollViewListener scrollViewListener) {  
 			this.scrollViewListener = scrollViewListener;  
 		}  
-	  
 		@Override  
 		protected void onScrollChanged(int x, int y, int oldx, int oldy) {  
 			super.onScrollChanged(x, y, oldx, oldy);  
 			if (scrollViewListener != null) {  
 				scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);  
 			}  
+		}
+		@SuppressLint("NewApi")
+		@Override
+		protected void onOverScrolled(int scrollX, int scrollY,
+				boolean clampedX, boolean clampedY) {
+			// TODO Auto-generated method stub
+			super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+			if(scrollY != 0 && scrollViewListener != null){
+				scrollViewListener.onOverScrolled(this, scrollX, scrollY, clampedX, clampedY);
+			}
 		}  
-	
+		
+		
 	}
 
     
     public interface ScrollViewListener {  
     	  
-        void onScrollChanged( ScrollView scrollView, int x, int y, int oldx, int oldy);  
-      
-    }  
+        void onScrollChanged(MyPullScrollView scrollView, int x, int y, int oldx, int oldy);  
+        void onOverScrolled(MyPullScrollView scrollView,int scrollX, int scrollY,	boolean clampedX, boolean clampedY);
+    } 
 }

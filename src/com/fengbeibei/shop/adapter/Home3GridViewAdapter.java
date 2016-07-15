@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.bean.Home3Data;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -64,11 +66,22 @@ public class Home3GridViewAdapter extends BaseAdapter{
 		}
 		Home3Data home3Data= mHome3Data.get(position);
 		mImageLoader.displayImage(home3Data.getImage(), holder.image, mOptions, mAnimateFirstListener);
-		
+		setOnClick(convertView,home3Data.getType(),home3Data.getData());
 		return convertView;
 	}
 	
 	class ViewHolder{
 		ImageView image;
+	}
+	private void setOnClick(View view,final String type,final String data){
+		view.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				IntentHelper.filter(mContext, type, data);
+			}
+			
+		});
 	}
 }

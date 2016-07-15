@@ -35,6 +35,11 @@
             android:screenOrientation="portrait" 
             android:label="@string/login"></activity>
          <activity 
+            android:name=".activity.GoodsDetailActivity"
+            android:screenOrientation="portrait" 
+            android:label="@string/login">
+         </activity>
+         <activity 
              android:name=".activity.OrderListActivity"
              android:label="全部订单"></activity>
           <activity 

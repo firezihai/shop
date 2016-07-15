@@ -51,7 +51,6 @@ public class Order {
 		ArrayList<Order> orderList = new ArrayList<Order>();
 		try{
 			JSONArray arr = new JSONArray(json);
-			Log.d("d",json);
 			int size = arr.length();
 			for(int i=0; i < size ; i++){
 				JSONObject obj = arr.getJSONObject(i);

@@ -1,6 +1,9 @@
 package com.fengbeibei.shop.ui;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -23,29 +26,27 @@ import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
 import com.fengbeibei.shop.common.Constants;
 import com.fengbeibei.shop.common.HttpClientHelper;
 import com.fengbeibei.shop.common.HttpClientHelper.CallBack;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnPullEventListener;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshBase.State;
 import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyScrollView;
-import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.ScrollViewListener;
+import com.fengbeibei.shop.pulltorefresh.library.PullToRefreshScrollView.MyPullScrollView;
+import com.fengbeibei.shop.utils.DensityUtils;
 import com.fengbeibei.shop.widget.MyGridView;
+import com.fengbeibei.shop.widget.indicator.CirclePageIndicator;
 import com.fengbeibei.shop.zxing.activity.CaptureActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.DateUtils;
@@ -54,7 +55,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnScrollChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -66,11 +66,12 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 public class HomeFragment extends Fragment{
+	
 	private PullToRefreshScrollView mPullToRefresh;
+	private MyPullScrollView mScrollView;
 	/*主布局*/
 	private View homeLayout;
-	private MyScrollView mScrollView;
-	
+	private LinearLayout mHomeContainer;
 	/**
 	 * 记录按下时的位置
 	 */
@@ -81,11 +82,11 @@ public class HomeFragment extends Fragment{
 	/*轮播广告*/
 	private ViewPager mAdViewPager;
 	private ArrayList<ImageView> mAdData = new ArrayList<ImageView>();
-	private LinearLayout mAdPoint;
-	private ArrayList<ImageView> mAdPointData = new ArrayList<ImageView>();
-	private  final int SHOW_NEXT = 0011;
-	private boolean mShowNext = true;
+	private CirclePageIndicator mAdPoint;
+	private boolean isMoving = false;
+	private boolean isScroll = false;
 	private int mCurrentIndex = 0;
+	private Handler mHandler;
 	/*菜单*/
 	private Button mMenuCategoryBtn;
 	private Button mMenuUcenterBtn;
@@ -93,7 +94,10 @@ public class HomeFragment extends Fragment{
 	private Button mMenuCollectBtn;
 	private LinearLayout mHomeData;
 	
+	/*加载更多*/
 	private int curpage = 1;
+	private LinearLayout mFooterView; // 底部加载更多提示
+	private boolean mLoading = false; //是否正在加载
 	/*ImageLoader*/
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options = SystemHelper.getDisplayImageOptions(); 
@@ -102,65 +106,56 @@ public class HomeFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View homeLayout = inflater.inflate(R.layout.home,parent, false);
+		homeLayout = inflater.inflate(R.layout.home,parent, false);
 		
-		mHomeHead  = (LinearLayout) homeLayout.findViewById(R.id.homeHead);
-		mHomeHead.bringToFront();
+		initView(homeLayout);
+		mFooterView = (LinearLayout)  getActivity().getLayoutInflater().inflate(R.layout.listview_footer, null);
+	    mHomeContainer.addView(mFooterView);
+	    mFooterView.setVisibility(View.GONE);
+
+		//mHomeHead.bringToFront();
 		mPullToRefresh = (PullToRefreshScrollView)homeLayout.findViewById(R.id.homePullToRefresh);
-		mPullToRefresh.setMode(Mode.BOTH);
-		mPullToRefresh.getLoadingLayoutProxy(true,false).setPullLabel("下拉刷新");
-		mPullToRefresh.getLoadingLayoutProxy(false,true).setPullLabel("上拉刷新");
+		mPullToRefresh.setMode(Mode.PULL_FROM_START);
+		mPullToRefresh.getLoadingLayoutProxy().setPullLabel("下拉刷新");
 		mPullToRefresh.getLoadingLayoutProxy().setRefreshingLabel("正在刷新"); 
 		mPullToRefresh.getLoadingLayoutProxy().setReleaseLabel("释放立即刷新");  
-		mPullToRefresh.setOnRefreshListener(new OnRefreshListener2<ScrollView>(){
-			
+		mPullToRefresh.setOnRefreshListener(new OnRefreshListener<ScrollView>(){
+
 			@Override
-			public void onPullDownToRefresh(
-					PullToRefreshBase<ScrollView> refreshView) {
-				mHomeHead.setVisibility(View.GONE);
+			public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
 				// TODO Auto-generated method stub
 				initData();
 			}
-
-			@Override
-			public void onPullUpToRefresh(
-					PullToRefreshBase<ScrollView> refreshView) {
-				// TODO Auto-generated method stub
-				String label = DateUtils.formatDateTime(getActivity().getApplicationContext(), System.currentTimeMillis(),  
-                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL); 
-				refreshView.getLoadingLayoutProxy(false,true).setLastUpdatedLabel("最后更新："+label);  
-				curpage++;
-				initGoodsList();
-			}
-			
 			
 		});
-		mScrollView =(MyScrollView)mPullToRefresh.getRefreshableView();
-	   mScrollView.setScrollViewListener(new ScrollViewListener(){
+
+	    
+		mScrollView =(MyPullScrollView)mPullToRefresh.getRefreshableView();
+		mScrollView.setScrollViewListener(new PullToRefreshScrollView.ScrollViewListener(){
+			@Override
+			public void onOverScrolled(MyPullScrollView scrollView,
+					int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+				// TODO Auto-generated method stub
+				System.out.println("scrollY="+scrollY);
+				if(clampedY && scrollY>0){
+					mFooterView.setVisibility(View.VISIBLE);
+					Log.d("OverScrolled","showFooterView");
+				}
+				if(clampedY  && !mLoading){
+					mLoading = true;
+					curpage++;
+					initGoodsList();
+				}
+			}
 
 			@Override
-			public void onScrollChanged(ScrollView scrollView,
-					int x, int y, int oldx, int oldy) {
+			public void onScrollChanged(MyPullScrollView scrollView, int x,
+					int y, int oldx, int oldy) {
 				// TODO Auto-generated method stub
 				
-				int homeHeadH = mHomeHead.getMeasuredHeight();
-				float  baseRatio= (float) 255 /homeHeadH;
-				float ratio = (float) Math.ceil(baseRatio);
-				int transparent = (int)Math.ceil( ratio * y);
-				String transparentHex  =Integer.toHexString( transparent );
-				if( transparentHex.length() ==1){
-					transparentHex = "0"+ transparentHex;
-				}
-				if(transparent<=255){
-					mHomeHead.setBackgroundColor(Color.parseColor("#"+ transparentHex+"11cd6e"));
-				}else{
-					mHomeHead.setBackgroundColor(Color.parseColor("#FF11cd6e"));
-				}
 			}
-			
 		});
-	//	mScrollView.setOnScrollChangeListener(l);
-		initView(homeLayout);
+		
 		mScanBtn = (Button) homeLayout .findViewById(R.id.scanBtn);
 		mScanBtn.setOnClickListener(new OnClickListener(){
 
@@ -172,7 +167,6 @@ public class HomeFragment extends Fragment{
 			}
 			
 		});
-		
 		initData();
 		return homeLayout;
 	}
@@ -189,16 +183,7 @@ public class HomeFragment extends Fragment{
 					
 				} else if (event.getAction() == MotionEvent.ACTION_UP){
 					if (downLocation == event.getX()) {
-						if(type.equals("keyword")){
-							
-						} else if (type.equals("url")){
-							Intent intent  = new Intent(getActivity(),SubjectWebActivity.class);
-							intent.putExtra("data", data);
-							startActivity(intent);
-						} else if (type.equals("goods")){
-							Intent intent  = new Intent(getActivity(),GoodsDetailActivity.class);
-							startActivity(intent);
-						}
+						IntentHelper.filter(getActivity(), type, data);
 					}
 				}
 				return true;
@@ -211,8 +196,10 @@ public class HomeFragment extends Fragment{
 	 * @param homeLayout
 	 */
 	public void initView(View homeLayout){
+		mHomeHead  = (LinearLayout) homeLayout.findViewById(R.id.homeHead);
 		mAdViewPager = (ViewPager)homeLayout.findViewById(R.id.adViewPager);
-		mAdPoint = (LinearLayout) homeLayout.findViewById(R.id.adPoint);
+		mAdPoint = (CirclePageIndicator) homeLayout.findViewById(R.id.adPoint);
+		mHomeContainer = (LinearLayout) homeLayout.findViewById(R.id.homeContainer);
 		mHomeData = (LinearLayout)homeLayout.findViewById(R.id.homeData);
 	}
 	public void initData(){
@@ -222,7 +209,7 @@ public class HomeFragment extends Fragment{
 			public void onFinish(Message response) {
 				// TODO Auto-generated method stub
 				mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
-				mHomeHead.setVisibility(View.VISIBLE);
+				
 				if(response.what == HttpStatus.SC_OK){
 					
 					mHomeData.removeAllViews();
@@ -270,9 +257,9 @@ public class HomeFragment extends Fragment{
 
 			@Override
 			public void onFinish(Message response) {
-			//	mPullToRefresh.onRefreshComplete();//加载完成下拉控件取消显示
-				mPullToRefresh.onRefreshComplete();
 				// TODO Auto-generated method stub
+				 mFooterView.setVisibility(View.GONE);
+				 mLoading = false;
 				if (response.what == HttpStatus.SC_OK){
 					String json = (String)response.obj;
 					try{
@@ -389,11 +376,8 @@ public class HomeFragment extends Fragment{
 			e.printStackTrace();
 		}
 		if(adList.size() > 0 && adList != null){
-			mHandler.removeMessages(SHOW_NEXT);
 			mAdViewPager.removeAllViews();
-			mAdPoint.removeAllViews();
 			mAdData.clear();
-			mAdPointData.clear();
 			for(int i =0 ; i<adList.size() ; i++){
 				AdList ad = adList.get(i);
 				ImageView imageView = new ImageView(getActivity());
@@ -401,141 +385,89 @@ public class HomeFragment extends Fragment{
 				imageView.setImageResource(R.drawable.dic_av_item_pic_bg);
 				imageView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 				imageLoader.displayImage(ad.getImage(), imageView, options,animateFirstListener);
+				OnViewClick(imageView,ad.getType(),ad.getData());
 				mAdData.add(imageView);
-				ImageView imageViewPoint = new ImageView(getActivity());
-				LinearLayout.LayoutParams pointParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT,1);
-				imageViewPoint.setLayoutParams(pointParams);
-				imageViewPoint.setImageResource(R.drawable.home_point);
-				
-				mAdPointData.add(imageViewPoint);
-				mAdPoint.addView(imageViewPoint);
 			}
+	
 			AdViewPagerAdapter adViewPagerAdapter = new AdViewPagerAdapter(mAdData);
 			mAdViewPager.setAdapter(adViewPagerAdapter); 
+			
+			
+			mAdPoint.setViewPager(mAdViewPager);
+			mAdPoint.setCurrentItem(0);
+			mAdViewPager.setOnTouchListener(new RegOnTouchListener());
 			mAdViewPager.addOnPageChangeListener(new OnPageChangeListener(){
-	
+
 				@Override
-				public void onPageScrollStateChanged(int arg0) {
+				public void onPageScrollStateChanged(int state) {
 					// TODO Auto-generated method stub
+					isMoving = state != ViewPager.SCROLL_STATE_IDLE;
+					isScroll = state != ViewPager.SCROLL_STATE_IDLE;
 					
 				}
-	
+
 				@Override
-				public void onPageScrolled(int arg0, float arg1, int arg2) {
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 					// TODO Auto-generated method stub
-					
+					isMoving = position != mCurrentIndex;
 				}
-	
+
 				@Override
-				public void onPageSelected(int arg0) {
+				public void onPageSelected(int position) {
 					// TODO Auto-generated method stub
-					
+					isMoving = false;
+					mCurrentIndex = position;
+					isScroll = false;
 				}
 				
 			});
+		}
+		
+		mHandler = new Handler(){
+
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				mAdViewPager.setCurrentItem(mCurrentIndex);
+			}
 			
-			if(mAdData.size()> 0){
-				selectPoint(0);
-				mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
-			}
-		}
-	}
-	
-	Handler mHandler = new Handler(){
+		};
+		ScheduledExecutorService schedule = Executors.newSingleThreadScheduledExecutor();
+		schedule.scheduleWithFixedDelay(new Runnable(){
 
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			if(msg.what == SHOW_NEXT){
-				if(mShowNext){
-					showNext();
-				}else{
-					showPrev();
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(!isMoving && !isScroll){
+					mCurrentIndex = (mCurrentIndex +1) % mAdData.size();
+					mHandler.obtainMessage().sendToTarget();
 				}
-				mHandler.sendEmptyMessageDelayed(SHOW_NEXT, 3000);
 			}
-			//switch(msg.what)
-			super.handleMessage(msg);
-		}
-	};
-	/**
-	 * 下一张图片
-	 */
-	private void showNext(){
-		mCurrentIndex++;
-		if(mCurrentIndex > mAdData.size() -1){
-			unSelectPoint(mAdData.size() -1);
-			mCurrentIndex = 0;
-			selectPoint(mCurrentIndex);
-		}else{
-			unSelectPoint(mCurrentIndex-1);
-			selectPoint(mCurrentIndex);
-		}
-		mAdViewPager.setCurrentItem(mCurrentIndex);
-	}
-	/**
-	 * 上一张图片
-	 */
-	private void showPrev(){
-		mCurrentIndex--;
-		if(mCurrentIndex < -1){
-			unSelectPoint(mCurrentIndex+1);
-			mCurrentIndex = mAdData.size() -1;
-			selectPoint(mCurrentIndex);
-		}else{
-			unSelectPoint(mCurrentIndex+1);
-			selectPoint(mCurrentIndex);
-		}
-		mAdViewPager.setCurrentItem(mCurrentIndex);
-	}
-	/**
-	 * 激活已选中图片对应点
-	 */
-	private void selectPoint(int index){
-		ImageView img = mAdPointData.get(index);
-		img.setSelected(true);
-	}
-	/**
-	 * 禁用未选中图片对应点
-	 * @param index
-	 */
-	private void unSelectPoint(int index){
-		ImageView img = mAdPointData.get(index);
-		img.setSelected(false);
+			
+		}, 2, 4, TimeUnit.SECONDS);
+		
 	}
 
-	/*private class RegOnTouchListener implements View.OnTouchListener{
+	private class RegOnTouchListener implements View.OnTouchListener{
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			// TODO Auto-generated method stub
 			switch(event.getAction()){
-			case MotionEvent.ACTION_DOWN:
-				
-				break;
-			case MotionEvent.ACTION_MOVE:
-				int scrollY = mScrollView.getScrollY();
-				int homeHeadH = mHomeHead.getMeasuredHeight();
-				float base =(float) 255 /homeHeadH;
-				int ratio =(int) Math.ceil(base*1000 ) ;
-			
-				if(scrollY >=0  && scrollY <= homeHeadH){
-					float transparentInt =  ratio*scrollY / 1000;
-					int transparent = (int)Math.ceil( transparentInt);
-					String transparentHex  =Integer.toHexString( transparent );
-					if( transparentHex.length() ==1){
-						transparentHex = "0"+ transparentHex;
-					}
-					System.out.println("#"+ transparentHex+"11cd6e"+"== ratio="+ ratio+"homeHeadH="+homeHeadH+"base"+base);
-					mHomeHead.setBackgroundColor(Color.parseColor("#"+ transparentHex+"11cd6e"));
-				}
-				break;
-			 default:
-			        break;
+				case MotionEvent.ACTION_UP:
+					isMoving = false;
+					break;
+				case MotionEvent.ACTION_CANCEL:
+					isMoving = false;
+					break;
+				case MotionEvent.ACTION_MOVE:
+					isMoving = true;
+					break;
 			}
 			return false;
 		}
 		
-	}*/
+	}
 	
 }

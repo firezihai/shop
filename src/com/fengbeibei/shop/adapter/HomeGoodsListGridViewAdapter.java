@@ -6,6 +6,7 @@ import com.fengbeibei.shop.R;
 import com.fengbeibei.shop.activity.SearchActivity;
 import com.fengbeibei.shop.bean.HomeGoodsList;
 import com.fengbeibei.shop.common.AnimateFirstDisplayListener;
+import com.fengbeibei.shop.common.IntentHelper;
 import com.fengbeibei.shop.common.SystemHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -88,7 +90,20 @@ public class HomeGoodsListGridViewAdapter extends BaseAdapter{
 		holder.goodsName.setText(goods.getGoodsName());
 		holder.goodsPrice.setText(goods.getGoodsPrice());
 		mImageLoader.displayImage(goods.getGoodsImage(), holder.goodsImage, mOptions, mAnimateFirstListener);
+		setOnClick(convertView, goods.getGoodsId());
 		return convertView;
 	}
+	
+	private void setOnClick(View view,final String goods_id){
+		view.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				IntentHelper.goodsDetail(mContext, goods_id);
+			}
+			
+		});
+	}
+	
 }

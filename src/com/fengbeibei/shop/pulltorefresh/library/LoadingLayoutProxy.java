@@ -65,7 +65,6 @@ public class LoadingLayoutProxy implements ILoadingLayout {
 		}
 	}
 
-	@Override
 	public void setTextTypeface(Typeface tf) {
 		for (LoadingLayout layout : mLoadingLayouts) {
 			layout.setTextTypeface(tf);

@@ -376,7 +376,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		return false;
 	}
 
-	@Override
 	public final void setScrollingWhileRefreshingEnabled(boolean allowScrollingWhileRefreshing) {
 		mScrollingWhileRefreshingEnabled = allowScrollingWhileRefreshing;
 	}
@@ -384,7 +383,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	/**
 	 * @deprecated See {@link #setScrollingWhileRefreshingEnabled(boolean)}
 	 */
-	@Deprecated
 	public void setDisableScrollingWhileRefreshing(boolean disableScrollingWhileRefreshing) {
 		setScrollingWhileRefreshingEnabled(!disableScrollingWhileRefreshing);
 	}
@@ -398,7 +396,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy()}.
 	 */
-	@Deprecated
 	public void setLastUpdatedLabel(CharSequence label) {
 		getLoadingLayoutProxy().setLastUpdatedLabel(label);
 	}
@@ -407,7 +404,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy()}.
 	 */
-	@Deprecated
 	public void setLoadingDrawable(Drawable drawable) {
 		getLoadingLayoutProxy().setLoadingDrawable(drawable);
 	}
@@ -416,7 +412,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy(boolean, boolean)}.
 	 */
-	@Deprecated
 	public void setLoadingDrawable(Drawable drawable, Mode mode) {
 		getLoadingLayoutProxy(mode.showHeaderLoadingLayout(), mode.showFooterLoadingLayout()).setLoadingDrawable(
 				drawable);
@@ -438,7 +433,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		}
 	}
 
-	@Override
 	public void setOnPullEventListener(OnPullEventListener<T> listener) {
 		mOnPullEventListener = listener;
 	}
@@ -459,7 +453,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy()}.
 	 */
-	@Deprecated
 	public void setPullLabel(CharSequence pullLabel) {
 		getLoadingLayoutProxy().setPullLabel(pullLabel);
 	}
@@ -468,7 +461,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy(boolean, boolean)}.
 	 */
-	@Deprecated
 	public void setPullLabel(CharSequence pullLabel, Mode mode) {
 		getLoadingLayoutProxy(mode.showHeaderLoadingLayout(), mode.showFooterLoadingLayout()).setPullLabel(pullLabel);
 	}
@@ -478,7 +470,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated This simple calls setMode with an appropriate mode based on
 	 *             the passed value.
 	 */
-	@Deprecated
 	public final void setPullToRefreshEnabled(boolean enable) {
 		setMode(enable ? Mode.getDefault() : Mode.DISABLED);
 	}
@@ -504,7 +495,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy()}.
 	 */
-	@Deprecated
 	public void setRefreshingLabel(CharSequence refreshingLabel) {
 		getLoadingLayoutProxy().setRefreshingLabel(refreshingLabel);
 	}
@@ -513,7 +503,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy(boolean, boolean)}.
 	 */
-	@Deprecated
 	public void setRefreshingLabel(CharSequence refreshingLabel, Mode mode) {
 		getLoadingLayoutProxy(mode.showHeaderLoadingLayout(), mode.showFooterLoadingLayout()).setRefreshingLabel(
 				refreshingLabel);
@@ -523,7 +512,6 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy()}.
 	 */
-	@Deprecated
 	public void setReleaseLabel(CharSequence releaseLabel) {
 		setReleaseLabel(releaseLabel, Mode.BOTH);
 	}
@@ -532,13 +520,11 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	 * @deprecated You should now call this method on the result of
 	 *             {@link #getLoadingLayoutProxy(boolean, boolean)}.
 	 */
-	@Deprecated
 	public void setReleaseLabel(CharSequence releaseLabel, Mode mode) {
 		getLoadingLayoutProxy(mode.showHeaderLoadingLayout(), mode.showFooterLoadingLayout()).setReleaseLabel(
 				releaseLabel);
 	}
 
-	@Override
 	public void setScrollAnimationInterpolator(Interpolator interpolator) {
 		mScrollAnimationInterpolator = interpolator;
 	}
@@ -1070,8 +1056,8 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		mRefreshableViewWrapper.addView(refreshableView, ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT);
 
-		addViewInternal(mRefreshableViewWrapper, new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+		addViewInternal(mRefreshableViewWrapper, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
 	}
 
 	private void callRefreshListener() {
@@ -1230,12 +1216,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 	private LinearLayout.LayoutParams getLoadingLayoutLayoutParams() {
 		switch (getPullToRefreshScrollDirection()) {
 			case HORIZONTAL:
-				return new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-						android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+				return new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+						LinearLayout.LayoutParams.MATCH_PARENT);
 			case VERTICAL:
 			default:
-				return new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-						android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+				return new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
 		}
 	}
 
@@ -1382,13 +1368,11 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 		/**
 		 * @deprecated Use {@link #PULL_FROM_START} from now on.
 		 */
-		@Deprecated
 		public static Mode PULL_DOWN_TO_REFRESH = Mode.PULL_FROM_START;
 
 		/**
 		 * @deprecated Use {@link #PULL_FROM_END} from now on.
 		 */
-		@Deprecated
 		public static Mode PULL_UP_TO_REFRESH = Mode.PULL_FROM_END;
 
 		/**
